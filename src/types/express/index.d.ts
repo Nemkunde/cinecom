@@ -10,10 +10,3 @@ declare global {
     }
   }
 }
-declare global {
-    namespace Express {
-        interface Request {
-            user?: JwtPayload & { userId: number; role: string };
-        }
-    }
-}

@@ -30,9 +30,17 @@ export const getUser = async (req: Request, res: Response) => {
     }
 };
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response): Promise<void> => {
+    const { email, password, firstname, lastname, phone } = req.body;
+    
+    if (!email || !password || !firstname || !lastname || !phone) {
+        res.status(400).json({ error: 'All fields are required' });
+        return;
+    }
+
     try {
-        await createUser();
+        const user = await createUser(email, password, firstname, lastname, phone);
+        res.status(201).json({ user });
     } catch (error) {
         res.status(500).json({ error: 'Failed to create user' });
     }

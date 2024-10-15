@@ -11,6 +11,7 @@ export const usersTable = pgTable('users', {
     password_hash: varchar({ length: 255 }).notNull(),
     created_at: timestamp('created_at').notNull().defaultNow(),
     phone: numeric().notNull(),
+    role: varchar('role', { length: 20 }).default('user').notNull(),
 });
 
 export const auditoriumsTable = pgTable('auditoriums', {

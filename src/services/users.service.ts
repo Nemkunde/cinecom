@@ -3,7 +3,7 @@ import { usersTable } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
+ 
 const secret = process.env.JWT_SECRET || 'your_jwt_secret';
 
 export const getAllUsers = async () => {
@@ -34,7 +34,7 @@ export const getSingleUser = async (id: number): Promise<string|null> => {
     }
 };
 
-export const createUser = async (email: string, password: string, firstname: string, lastname: string, phone: string) => {
+export const createUser = async (email: string, password: string, firstname: string, lastname: string, phone: string, role: string) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
     try {
@@ -43,10 +43,12 @@ export const createUser = async (email: string, password: string, firstname: str
             firstname,
             lastname,
             password_hash: passwordHash,
-            phone
+						phone,
+						role
         });
         return user;
-    } catch (error) {
+		} catch (error) {
+			console.error(error);
         throw new Error('Failed to create user');
     }
 };
@@ -68,11 +70,17 @@ export const signInUser = async (email: string, password: string) => {
             throw new Error('Invalid credentials');
         }
 
-        return user[0];
+        const token = generateToken(user[0].user_id, user[0].role);
+        
+        // Return both the user and the token
+        return { user: user[0], token };
     } catch (error) {
-        throw new Error("failed to login");
+        throw new Error('Failed to login');
     }
 };
-export const generateToken = (userId: number) => {
-    return jwt.sign({ userId }, secret, { expiresIn: '1h' });
+
+
+
+export const generateToken = (userId: number, role: string) => {
+    return jwt.sign({ userId, role }, secret, { expiresIn: '1h' });
 };

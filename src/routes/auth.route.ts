@@ -6,11 +6,17 @@ const router = Router();
 
 router.post('/signup', signUp);
 router.post('/signin', signIn);
-router.get('/protected', authenticateToken, (req: Request, res: Response): void => {
-    res.status(200).json({ message: 'Protected content' });
+router.get('/profile', authenticateToken, authorizeRole(['user', 'admin']), (req: Request, res: Response): void => {
+    res.status(200).json({
+        message: 'Profile content for user or admin',
+        user: req.user 
+    });
 });
-router.get('/admin', authenticateToken, authorizeRole('admin'), (req: Request, res: Response): void => {
-    res.status(200).json({ message: 'Admin content' });
+router.get('/admin', authenticateToken, authorizeRole(['admin']), (req: Request, res: Response): void => {
+    res.status(200).json({
+        message: 'Admin content',
+        user: req.user
+    });
 });
 
 export default router;

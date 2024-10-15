@@ -22,12 +22,17 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
         next();
     });
 };
-export const authorizeRole = (role: string) => {
+export const authorizeRole = (allowedRoles: string[]) => {
     return (req: Request, res: Response, next: NextFunction): void => {
-        if (!req.user || req.user.role !== role) {
-            res.status(403).json({ message: 'Access denied: Insufficient role' });
+        const userRole = req.user?.role; 
+        
+
+        if (!userRole || !allowedRoles.includes(userRole)) {
+            
+            res.status(403).json({ message: 'Access denied: Unauthorized role' });
             return;
-        }   
+        }
+
         next();
     };
 };

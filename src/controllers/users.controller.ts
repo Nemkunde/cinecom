@@ -33,7 +33,7 @@ export const getUser = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response): Promise<void> => {
     const { email, password, firstname, lastname, phone, role } = req.body;
     
-    if (!email || !password || !firstname || !lastname || !phone) {
+    if (!email || !password || !firstname || !lastname || !phone || !role) {
         res.status(400).json({ error: 'All fields are required' });
         return;
     }

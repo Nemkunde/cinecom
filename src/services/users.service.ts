@@ -72,7 +72,6 @@ export const signInUser = async (email: string, password: string) => {
 
         const token = generateToken(user[0].user_id, user[0].role);
         
-        // Return both the user and the token
         return { user: user[0], token };
     } catch (error) {
         throw new Error('Failed to login');

@@ -3,7 +3,7 @@ import { usersTable } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
- 
+
 const secret = process.env.JWT_SECRET || 'your_jwt_secret';
 
 export const getAllUsers = async () => {
@@ -15,14 +15,9 @@ export const getAllUsers = async () => {
     }
 };
 
-
-export const getSingleUser = async (id: number): Promise<string|null> => {
+export const getSingleUser = async (id: number): Promise<string | null> => {
     try {
-        const user = await db
-            .select()
-            .from(usersTable)
-            .where(eq(usersTable.user_id, id))
-            .limit(1);
+        const user = await db.select().from(usersTable).where(eq(usersTable.user_id, id)).limit(1);
 
         if (user.length === 0) {
             return null;
@@ -34,7 +29,14 @@ export const getSingleUser = async (id: number): Promise<string|null> => {
     }
 };
 
-export const createUser = async (email: string, password: string, firstname: string, lastname: string, phone: string, role: string) => {
+export const createUser = async (
+    email: string,
+    password: string,
+    firstname: string,
+    lastname: string,
+    phone: string,
+    role: string
+) => {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
     try {
@@ -43,22 +45,18 @@ export const createUser = async (email: string, password: string, firstname: str
             firstname,
             lastname,
             password_hash: passwordHash,
-						phone,
-						role
+            phone,
+            role,
         });
         return user;
-		} catch (error) {
-			console.error(error);
+    } catch (error) {
+        console.error(error);
         throw new Error('Failed to create user');
     }
 };
 export const signInUser = async (email: string, password: string) => {
     try {
-        const user = await db
-            .select()
-            .from(usersTable)
-            .where(eq(usersTable.email, email))
-            .limit(1);
+        const user = await db.select().from(usersTable).where(eq(usersTable.email, email)).limit(1);
 
         if (user.length === 0) {
             throw new Error('User not found');
@@ -71,14 +69,12 @@ export const signInUser = async (email: string, password: string) => {
         }
 
         const token = generateToken(user[0].user_id, user[0].role);
-        
+
         return { user: user[0], token };
     } catch (error) {
         throw new Error('Failed to login');
     }
 };
-
-
 
 export const generateToken = (userId: number, role: string) => {
     return jwt.sign({ userId, role }, secret, { expiresIn: '1h' });

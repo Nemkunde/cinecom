@@ -1,14 +1,5 @@
 import { db } from '../db/drizzle';
-import {
-    bookingsTable,
-    movieActorsTable,
-    movieDirectorsTable,
-    movieGenresTable,
-    moviesTable,
-    screeningsTable,
-    seatsTable,
-    ticketsTable,
-} from '../db/schema';
+import { bookingsTable, screeningsTable, seatsTable, ticketsTable } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { moodifyMovieStructure, movieDbCall, Movies } from './helpers';
 
@@ -78,7 +69,6 @@ export const bookSeat = async ({
     screeningId: number;
     userId: number;
 }) => {
-    // try {
     return await db.transaction(async (tx) => {
         const [booking] = await tx
             .insert(bookingsTable)
@@ -113,21 +103,17 @@ export const bookSeat = async ({
 
         return updatedBooking;
     });
-    // } catch (error) {
-    //     throw new Error('Could not book seat');
-    // }
-    // try {
-    //     const [booking] = await db
-    //         .insert(bookingsTable)
-    //         .values({
-    //             seat_id: seatId,
-    //             screening_id: screeningId,
-    //             user_id: userId,
-    //             total_price: 300,
-    //         })
-    //         .returning();
-    //     return booking;
-    // } catch (error) {
-    //     throw new Error('Could not book seat');
-    // }
+};
+
+export const deleteBooking = async (id: number) => {
+    try {
+        const result = await db
+            .delete(bookingsTable)
+            .where(eq(bookingsTable.booking_id, id))
+            .returning();
+
+        return result[0];
+    } catch (error) {
+        throw new Error('Could not delete booking');
+    }
 };

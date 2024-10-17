@@ -89,10 +89,10 @@ export const bookSeat = async ({
                 .insert(ticketsTable)
                 .values({
                     booking_id: booking.booking_id,
-                    price: 1000,
+                    ticket_price: 1000,
                 })
                 .returning();
-            totalPrice += ticket.price;
+            totalPrice += ticket.ticket_price;
         }
 
         const [updatedBooking] = await tx

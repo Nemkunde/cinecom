@@ -112,6 +112,6 @@ export const ticketsTable = pgTable('tickets', {
     booking_id: integer('booking_id')
         .notNull()
         .references(() => bookingsTable.booking_id),
-    price: integer().notNull(),
+    ticket_price: integer().notNull(),
     ticket_status: ticketStatus('ticket_status').notNull().default('Active'),
 });

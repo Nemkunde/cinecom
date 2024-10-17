@@ -1,7 +1,6 @@
 import { db } from '../db/drizzle';
 import { bookingsTable, screeningsTable, seatsTable, ticketsTable } from '../db/schema';
 import { eq } from 'drizzle-orm';
-import { moodifyMovieStructure, movieDbCall, Movies } from './helpers';
 
 export const getAvailableSeats = async (screeningId: number) => {
     try {
@@ -28,7 +27,7 @@ export const getAvailableSeats = async (screeningId: number) => {
 
         return allSeats.filter((seat) => !bookedSeatIds.has(seat.seat_id));
     } catch (error) {
-        throw new Error('Error fetching all movies');
+        throw new Error('Error fetching all seats');
     }
 };
 
@@ -47,16 +46,6 @@ export const getBookedSeats = async (screeningId: number) => {
         return bookedSeats;
     } catch (error) {
         throw new Error('Failed getting booked seats');
-    }
-};
-
-export const getMovieById = async (movieId: number) => {
-    try {
-        const movies = await movieDbCall(true, movieId);
-        const moviesWithDirectorsActorsGenres = Array.from(moodifyMovieStructure(movies).values());
-        return moviesWithDirectorsActorsGenres;
-    } catch (error) {
-        throw new Error('Error getting movie by id');
     }
 };
 

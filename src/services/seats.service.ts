@@ -1,27 +1,27 @@
-import { db } from '../db/drizzle';
-import { bookingsTable, seatsTable } from '../db/schema';
-import { eq } from 'drizzle-orm';
+import { db } from "../db/drizzle";
+import { bookingsTable, seatsTable } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 export const getAllSeats = async () => {
-    try {
-        const seats = await db.select().from(seatsTable);
-        return seats;
-    } catch (error) {
-        throw new Error('Error fetching seats');
-    }
+  try {
+    const seats = await db.select().from(seatsTable);
+    return seats;
+  } catch (error) {
+    throw new Error("Error fetching seats");
+  }
 };
 
 export const getAllSeatsByAuditorium = async (auditoriumId: number) => {
-    try {
-        const seats = await db
-            .select()
-            .from(seatsTable)
-            .where(eq(seatsTable.auditorium_id, auditoriumId));
+  try {
+    const seats = await db
+      .select()
+      .from(seatsTable)
+      .where(eq(seatsTable.auditorium_id, auditoriumId));
 
-        return seats;
-    } catch (error) {
-        throw new Error('Fail');
-    }
+    return seats;
+  } catch (error) {
+    throw new Error("Fail");
+  }
 };
 
 // export const bookSeat = async ({

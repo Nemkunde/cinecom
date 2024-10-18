@@ -37,6 +37,11 @@ export const createUser = async (
     phone: string,
     role: string
 ) => {
+    const passwordValidationRegex = /^(?=.*[A-Za-z])(?=.*[\d\W])[A-Za-z\d\W]{8,}$/;
+  
+    if (!passwordValidationRegex.test(password)) {
+    throw new Error('Password must be at least 8 characters long and contain a letter, and either a number or a special character.');
+    }
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
     try {

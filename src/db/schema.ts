@@ -6,6 +6,7 @@ import {
   text,
   numeric,
   pgEnum,
+  customType,
 } from "drizzle-orm/pg-core";
 
 export const bookingStatus = pgEnum("status", ["Confirmed", "Cancelled"]);
@@ -14,6 +15,12 @@ export const ticketStatus = pgEnum("ticket_status", [
   "Cancalled",
   "Refunded",
 ]);
+
+export const bookingReferenceType = customType<{ data: string }>({
+  dataType() {
+    return "char(6)";
+  },
+});
 
 export const usersTable = pgTable("users", {
   user_id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -52,9 +59,11 @@ export const bookingsTable = pgTable("bookings", {
     .notNull()
     .references(() => seatsTable.seat_id),
   total_price: integer(),
+  booking_date: timestamp("booking_date"),
   status: bookingStatus("status").default("Confirmed"),
   customer_name: varchar(),
   customer_email: varchar(),
+  booking_reference: bookingReferenceType("booking_reference").unique(),
 });
 
 export const moviesTable = pgTable("movies", {
@@ -126,4 +135,17 @@ export const ticketsTable = pgTable("tickets", {
     .references(() => bookingsTable.booking_id),
   ticket_price: integer().notNull(),
   ticket_status: ticketStatus("ticket_status").notNull().default("Active"),
+});
+
+export const bookingHistoryTable = pgTable("bookinghistory", {
+  history_id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  booking_id: integer("booking_id")
+    .notNull()
+    .references(() => bookingsTable.booking_id),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => usersTable.user_id),
+  action: varchar(),
+  status: varchar(),
+  action_timestamp: timestamp("action_timestamp"),
 });

@@ -5,7 +5,7 @@ import {
   seatsTable,
   ticketsTable,
 } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 export const getAvailableSeats = async (screeningId: number) => {
   try {
@@ -54,6 +54,17 @@ export const getBookedSeats = async (screeningId: number) => {
   }
 };
 
+const generateBookingReference = () => {
+  const numbers = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
+  const letters = Array(3)
+    .fill(null)
+    .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
+    .join("");
+  return `${numbers}${letters}`;
+};
+
 export const bookSeat = async ({
   seatIds,
   screeningId,
@@ -64,21 +75,70 @@ export const bookSeat = async ({
   userId: number;
 }) => {
   return await db.transaction(async (tx) => {
-    const [booking] = await tx
+    const screening = await tx
+      .select({ auditorium_id: screeningsTable.auditorium_id })
+      .from(screeningsTable)
+      .where(eq(screeningsTable.screening_id, screeningId))
+      .limit(1);
+
+    if (!screening.length) {
+      throw new Error("Screening not found");
+    }
+
+    const auditoriumId = screening[0].auditorium_id;
+
+    const seatsInAuditorium = await tx
+      .select({ seat_id: seatsTable.seat_id })
+      .from(seatsTable)
+      .where(
+        and(
+          eq(seatsTable.auditorium_id, auditoriumId),
+          inArray(seatsTable.seat_id, seatIds)
+        )
+      );
+
+    if (seatsInAuditorium.length !== seatIds.length) {
+      throw new Error(
+        "One or more of the selected seats do not belong to the correct auditorium"
+      );
+    }
+
+    const alreadyBookedSeats = await tx
+      .select({ seat_id: bookingsTable.seat_id })
+      .from(bookingsTable)
+      .where(
+        and(
+          eq(bookingsTable.screening_id, screeningId),
+          inArray(bookingsTable.seat_id, seatIds)
+        )
+      );
+
+    if (alreadyBookedSeats.length > 0) {
+      const bookedSeatIds = alreadyBookedSeats.map((seat) => seat.seat_id);
+      throw new Error(
+        `The following seats are already booked: ${bookedSeatIds.join(", ")}`
+      );
+    }
+
+    const bookingValues = seatIds.map((seatId) => ({
+      screening_id: screeningId,
+      user_id: userId,
+      seat_id: seatId,
+      total_price: 0,
+    }));
+
+    const bookings = await tx
       .insert(bookingsTable)
-      .values({
-        screening_id: screeningId,
-        user_id: userId,
-        seat_id: seatIds[0],
-        status: "Confirmed",
-        total_price: 0,
-      })
+      .values(bookingValues)
       .returning();
 
-    console.log("booking", booking);
+    if (!bookings.length) {
+      throw new Error("Failed to create booking");
+    }
 
     let totalPrice = 0;
-    for (const seatId of seatIds) {
+
+    for (const booking of bookings) {
       const [ticket] = await tx
         .insert(ticketsTable)
         .values({
@@ -89,13 +149,20 @@ export const bookSeat = async ({
       totalPrice += ticket.ticket_price;
     }
 
-    const [updatedBooking] = await tx
-      .update(bookingsTable)
-      .set({ total_price: totalPrice })
-      .where(eq(bookingsTable.booking_id, booking.booking_id))
-      .returning();
+    const updatedBookings = await Promise.all(
+      bookings.map((booking) =>
+        tx
+          .update(bookingsTable)
+          .set({
+            total_price: totalPrice,
+            booking_reference: generateBookingReference(),
+          })
+          .where(eq(bookingsTable.booking_id, booking.booking_id))
+          .returning()
+      )
+    );
 
-    return updatedBooking;
+    return updatedBookings;
   });
 };
 

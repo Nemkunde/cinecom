@@ -12,7 +12,8 @@ export const authenticateToken = (
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    res.sendStatus(401);
+    req.user = { role: "guest" };
+    next();
     return;
   }
 

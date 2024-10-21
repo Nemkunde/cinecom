@@ -26,11 +26,26 @@ export const getMovieById = async (movieId: number) => {
     const moviesWithDirectorsActorsGenres = Array.from(
       moodifyMovieStructure(movies).values()
     );
-    return moviesWithDirectorsActorsGenres;
+    if (moviesWithDirectorsActorsGenres.length === 0) {
+      throw new Error("Movie not found");
+    }
+    return moviesWithDirectorsActorsGenres[0];
   } catch (error) {
     throw new Error("Error getting movie by id");
   }
 };
+
+/*export const getMovieById = async (movieId: number) => {
+  try {
+    const movies = await movieDbCall(true, movieId);
+    const moviesWithDirectorsActorsGenres = Array.from(
+      moodifyMovieStructure(movies).values()
+    );
+    return moviesWithDirectorsActorsGenres;
+  } catch (error) {
+    throw new Error("Error getting movie by id");
+  }
+};*/
 
 export const updateMovie = async (
   id: number,

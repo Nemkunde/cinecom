@@ -90,6 +90,53 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
     }) => {
       if (!moviesMap.has(movieId)) {
         moviesMap.set(movieId, {
+          movieId,
+          title,
+          description,
+          duration,
+          trailer_url,
+          poster_url,
+          director: [],
+          genres: [],
+          actors: [],
+        });
+      }
+
+      
+      if (genre && !moviesMap.get(movieId).genres.includes(genre)) {
+        moviesMap.get(movieId).genres.push(genre);
+      }
+
+      if (actors && !moviesMap.get(movieId).actors.includes(actors)) {
+        moviesMap.get(movieId).actors.push(actors);
+      }
+
+      if (director && !moviesMap.get(movieId).director.includes(director)) {
+        moviesMap.get(movieId).director.push(director);
+      }
+    }
+  );
+
+  return moviesMap;
+}
+
+
+/*export function moodifyMovieStructure(movies: ExtendedMovies[]) {
+  const moviesMap = new Map();
+  movies.forEach(
+    ({
+      movieId,
+      title,
+      description,
+      duration,
+      trailer_url,
+      poster_url,
+      genre,
+      actors,
+      director,
+    }) => {
+      if (!moviesMap.has(movieId)) {
+        moviesMap.set(movieId, {
           title,
           description,
           duration,
@@ -116,4 +163,4 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
   );
 
   return moviesMap;
-}
+}*/

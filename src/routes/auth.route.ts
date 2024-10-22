@@ -7,6 +7,18 @@ import {
 
 const router = Router();
 
+router.get(
+  "/checkout",
+  authenticateToken,
+  authorizeRole(["user", "admin", "guest"]),
+  (req: Request, res: Response): void => {
+    res.status(200).json({
+      message: "Checkout page",
+      userRole: req.user?.role,
+    });
+  }
+);
+
 router.post("/signup", signUp);
 router.post("/signin", signIn);
 router.get(

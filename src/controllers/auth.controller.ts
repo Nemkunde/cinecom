@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import {
-  signInUser,
-  generateToken,
-  createUser,
-} from "../services/users.service";
+import { signInUser, createUser } from "../services/users.service";
 
 export const signUp = async (req: Request, res: Response): Promise<void> => {
   const { email, password, firstname, lastname, phone, role } = req.body;
@@ -23,8 +19,12 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
       role
     );
     res.status(201).json({ user });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create user" });
+  } catch (error: any) {
+    if (error.message.includes("Password must be")) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Failed to create user" });
+    }
   }
 };
 

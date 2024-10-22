@@ -46,7 +46,7 @@ export const createUser = async (
   firstname: string,
   lastname: string,
   phone: string,
-  role: string
+  role: string = "user"
 ) => {
   const passwordValidationRegex =
     /^(?=.*[A-Za-z])(?=.*[\d\W])[A-Za-z\d\W]{8,}$/;
@@ -141,6 +141,7 @@ export const getUserBookingHistory = async (id: number) => {
   }
 };
 
-export const generateToken = (userId: number, role: string) => {
-  return jwt.sign({ userId, role }, secret, { expiresIn: "1h" });
+export const generateToken = (userId?: number, role: string = "guest") => {
+  const payload = userId ? { userId, role } : { role };
+  return jwt.sign(payload, secret, { expiresIn: "1h" });
 };

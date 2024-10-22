@@ -3,6 +3,7 @@ import {
   createUser,
   getAllUsers,
   getSingleUser,
+  getUserBookingHistory,
 } from "../services/users.service";
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -54,5 +55,25 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json({ user });
   } catch (error) {
     res.status(500).json({ error: "Failed to create user" });
+  }
+};
+
+export const getBookingHistory = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid user id" });
+    }
+
+    const bookingHistory = await getUserBookingHistory(id);
+
+    if (!bookingHistory) {
+      res.status(404).json({ error: "Booking history not found." });
+    }
+
+    res.status(200).json(bookingHistory);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get booking history" });
   }
 };

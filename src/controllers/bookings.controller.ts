@@ -25,6 +25,7 @@ export const allAvailableSeats = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch" });
   }
 };
+
 export const getAllBookedSeats = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -48,9 +49,9 @@ export const createBooking = async (req: Request, res: Response) => {
     const { seatIds, screeningId, userId } = req.body;
     const booking = await bookSeat({ seatIds, screeningId, userId });
     res.json({ success: true, booking });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    res.status(400).json({ success: false, error: "Failed to create booking" });
+    res.status(400).json({ success: false, error: error.message });
   }
 };
 

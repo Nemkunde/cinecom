@@ -1,5 +1,12 @@
 import { db } from "../db/drizzle";
-import { usersTable } from "../db/schema";
+import {
+  auditoriumsTable,
+  bookingsTable,
+  moviesTable,
+  screeningsTable,
+  seatsTable,
+  usersTable,
+} from "../db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -89,6 +96,48 @@ export const signInUser = async (email: string, password: string) => {
     return { user: user[0], token };
   } catch (error) {
     throw new Error("Failed to login");
+  }
+};
+
+export const getUserBookingHistory = async (id: number) => {
+  try {
+    const bookingHistory = await db
+      .select({
+        user_id: usersTable.user_id,
+        booking_id: bookingsTable.booking_id,
+        total_price: bookingsTable.total_price,
+        status: bookingsTable.status,
+        booking_date: bookingsTable.booking_date,
+        seat_number: seatsTable.seat_number,
+        row_number: seatsTable.row_number,
+        auditorium_name: auditoriumsTable.name,
+        movie_title: moviesTable.title,
+        screening_start_time: screeningsTable.start_time,
+      })
+      .from(bookingsTable)
+      .innerJoin(usersTable, eq(usersTable.user_id, bookingsTable.user_id))
+      .innerJoin(seatsTable, eq(seatsTable.seat_id, bookingsTable.seat_id))
+      .innerJoin(
+        auditoriumsTable,
+        eq(auditoriumsTable.auditorium_id, seatsTable.auditorium_id)
+      )
+      .innerJoin(
+        screeningsTable,
+        eq(screeningsTable.screening_id, bookingsTable.screening_id)
+      )
+      .innerJoin(
+        moviesTable,
+        eq(moviesTable.movie_id, screeningsTable.movie_id)
+      )
+      .where(eq(usersTable.user_id, id));
+
+    if (bookingHistory.length === 0) {
+      return null;
+    }
+
+    return bookingHistory;
+  } catch (error) {
+    throw new Error("Could not get booking history");
   }
 };
 

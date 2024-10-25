@@ -23,16 +23,19 @@ const IndexLazyImport = createFileRoute('/')()
 // Create/Update Routes
 
 const IndexLazyRoute = IndexLazyImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const ScreeningsIndexRoute = ScreeningsIndexImport.update({
+  id: '/screenings/',
   path: '/screenings/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const ScreeningsScreeningIdRoute = ScreeningsScreeningIdImport.update({
+  id: '/screenings/$screeningId',
   path: '/screenings/$screeningId',
   getParentRoute: () => rootRoute,
 } as any)

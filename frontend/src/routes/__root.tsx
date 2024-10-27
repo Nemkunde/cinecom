@@ -6,9 +6,9 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="relative flex flex-col w-full h-screen">
-      {/* <Header />
-      <Hero /> */}
+    <div className="relative flex flex-col w-full h-full bg-gray-800">
+      {/* <Header /> */}
+      {/* <Hero /> */}
       {/* <Seatmap screeningsId={3} /> */}
       <Outlet />
       <TanStackRouterDevtools />

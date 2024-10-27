@@ -12,6 +12,9 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    exclude: ["js-big-decimal"],
+  },
   plugins: [react(), TanStackRouterVite()],
   resolve: {
     alias: {

@@ -53,7 +53,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="bg-primary w-full max-w-lg mx-auto text-white">
       <CardHeader>
         <CardTitle>Register</CardTitle>
       </CardHeader>
@@ -64,7 +64,7 @@ const RegisterForm = () => {
           <div className="space-y-4">
             <div>
               <Label htmlFor="firstname">First Name</Label>
-              <Input
+              <Input className="bg-white"
                 id="firstname"
                 type="text"
                 name="firstname"
@@ -77,7 +77,7 @@ const RegisterForm = () => {
 
             <div>
               <Label htmlFor="lastname">Last Name</Label>
-              <Input
+              <Input className="bg-white"
                 id="lastname"
                 type="text"
                 name="lastname"
@@ -90,7 +90,7 @@ const RegisterForm = () => {
 
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input
+              <Input className="bg-white"
                 id="email"
                 type="email"
                 name="email"
@@ -103,7 +103,7 @@ const RegisterForm = () => {
 
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input
+              <Input className="bg-white"
                 id="password"
                 type="password"
                 name="password"
@@ -116,7 +116,7 @@ const RegisterForm = () => {
 
             <div>
               <Label htmlFor="phone">Phone Number</Label>
-              <Input
+              <Input className="bg-white"
                 id="phone"
                 type="tel"
                 name="phone"

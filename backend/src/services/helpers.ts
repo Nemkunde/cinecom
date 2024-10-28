@@ -13,6 +13,7 @@ import {
 export interface Movies {
   movie_id?: number;
   title: string;
+  age_limit: number | null;
   description: string;
   duration: number;
   trailer_url: string;
@@ -25,6 +26,7 @@ export interface Movies {
 interface ExtendedMovies {
   movieId: number;
   title: string;
+  age_limit: number | null;
   description: string;
   duration: number;
   trailer_url: string;
@@ -40,6 +42,7 @@ export const movieDbCall = (single: boolean, movieId?: number) => {
       movieId: moviesTable.movie_id,
       title: moviesTable.title,
       description: moviesTable.description,
+      age_limit: moviesTable.age_limit,
       duration: moviesTable.duration,
       trailer_url: moviesTable.trailer_url,
       poster_url: moviesTable.poster_url,
@@ -81,6 +84,7 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
       movieId,
       title,
       description,
+      age_limit,
       duration,
       trailer_url,
       poster_url,
@@ -93,6 +97,7 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
           title,
           description,
           duration,
+          age_limit,
           trailer_url,
           poster_url,
           director: [],

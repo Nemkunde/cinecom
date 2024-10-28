@@ -73,6 +73,7 @@ export const moviesTable = pgTable("movies", {
   duration: integer().notNull(),
   trailer_url: varchar().notNull(),
   poster_url: text().notNull(),
+  age_limit: integer(),
 });
 
 export const genresTable = pgTable("genres", {

@@ -22,7 +22,15 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getSingleUser = async (id: number): Promise<string | null> => {
+export const getSingleUser = async (
+  id: number
+): Promise<{
+  userId: number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  role: string;
+} | null> => {
   try {
     const user = await db
       .select()
@@ -34,8 +42,15 @@ export const getSingleUser = async (id: number): Promise<string | null> => {
       return null;
     }
 
-    return user[0].email;
+    return {
+      userId: user[0].user_id,
+      email: user[0].email,
+      firstname: user[0].firstname,
+      lastname: user[0].lastname,
+      role: user[0].role,
+    };
   } catch (error) {
+    console.error("Error fetching user:", error);
     throw new Error("Error fetching user");
   }
 };
@@ -75,26 +90,42 @@ export const createUser = async (
 };
 export const signInUser = async (email: string, password: string) => {
   try {
-    const user = await db
+    // Fetch user by email
+    const users = await db
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email))
       .limit(1);
 
-    if (user.length === 0) {
+    if (users.length === 0) {
       throw new Error("User not found");
     }
 
-    const validPassword = await bcrypt.compare(password, user[0].password_hash);
+    const user = users[0];
+
+    // Validate password
+    const validPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!validPassword) {
       throw new Error("Invalid credentials");
     }
 
-    const token = generateToken(user[0].user_id, user[0].role);
+    // Generate JWT token with user details
+    const token = generateToken(user.user_id, user.role);
 
-    return { user: user[0], token };
+    // Optionally, include other user fields if you need them
+    return {
+      user: {
+        userId: user.user_id,
+        email: user.email,
+        firstname: user.firstname, // Add first name
+        lastname: user.lastname, // Add last name
+        role: user.role,
+      },
+      token,
+    };
   } catch (error) {
+    console.error(error); // Log the error for debugging
     throw new Error("Failed to login");
   }
 };
@@ -141,7 +172,19 @@ export const getUserBookingHistory = async (id: number) => {
   }
 };
 
-export const generateToken = (userId?: number, role: string = "guest") => {
-  const payload = userId ? { userId, role } : { role };
+export const generateToken = (
+  userId: number,
+  role: string,
+  email?: string,
+  firstname?: string,
+  lastname?: string
+) => {
+  const payload = {
+    userId,
+    role,
+    email,
+    firstname,
+    lastname,
+  };
   return jwt.sign(payload, secret, { expiresIn: "1h" });
 };

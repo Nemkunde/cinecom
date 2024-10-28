@@ -1,11 +1,15 @@
 import { db } from "../db/drizzle";
 import {
+  actorsTable,
+  auditoriumsTable,
+  genresTable,
   movieActorsTable,
   movieDirectorsTable,
   movieGenresTable,
   moviesTable,
+  screeningsTable,
 } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, ilike, gte, lt } from "drizzle-orm";
 import { moodifyMovieStructure, movieDbCall, Movies } from "./helpers";
 
 export const getAllMovies = async () => {
@@ -26,7 +30,7 @@ export const getMovieById = async (movieId: number) => {
     const moviesWithDirectorsActorsGenres = Array.from(
       moodifyMovieStructure(movies).values()
     );
-    return moviesWithDirectorsActorsGenres;
+    return moviesWithDirectorsActorsGenres[0];
   } catch (error) {
     throw new Error("Error getting movie by id");
   }
@@ -69,6 +73,7 @@ export const createMovie = async (movieData: Movies) => {
         title: movieData.title,
         description: movieData.description,
         duration: movieData.duration,
+        age_limit: movieData.age_limit,
         trailer_url: movieData.trailer_url,
         poster_url: movieData.poster_url,
       })
@@ -103,4 +108,142 @@ export const createMovie = async (movieData: Movies) => {
 
     return movie;
   });
+};
+
+interface SearchCriteria {
+  title?: string;
+  genre?: string;
+  actorName?: string;
+  date?: string;
+}
+
+export const searchMovie = async ({
+  title,
+  genre,
+  actorName,
+  date,
+}: SearchCriteria) => {
+  try {
+    let startDate: any;
+    let endDate: any;
+
+    if (date) {
+      startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0);
+
+      endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+    }
+
+    const moviesQuery = db
+      .select({
+        movieId: moviesTable.movie_id,
+        title: moviesTable.title,
+        description: moviesTable.description,
+        duration: moviesTable.duration,
+        trailerUrl: moviesTable.trailer_url,
+        posterUrl: moviesTable.poster_url,
+        genreName: genresTable.genre_name,
+        actorName: actorsTable.actor_name,
+      })
+      .from(moviesTable)
+      .leftJoin(
+        movieGenresTable,
+        eq(movieGenresTable.movie_id, moviesTable.movie_id)
+      )
+      .leftJoin(
+        genresTable,
+        eq(genresTable.genre_id, movieGenresTable.genre_id)
+      )
+      .leftJoin(
+        movieActorsTable,
+        eq(movieActorsTable.movie_id, moviesTable.movie_id)
+      )
+      .leftJoin(
+        actorsTable,
+        eq(actorsTable.actor_id, movieActorsTable.actor_id)
+      )
+      .where(
+        and(
+          title ? ilike(moviesTable.title, `%${title}%`) : undefined,
+          genre ? ilike(genresTable.genre_name, `%${genre}%`) : undefined,
+          actorName
+            ? ilike(actorsTable.actor_name, `%${actorName}%`)
+            : undefined
+        )
+      );
+
+    const moviesMap = new Map<number, any>();
+
+    (await moviesQuery).forEach((row) => {
+      if (!moviesMap.has(row.movieId)) {
+        moviesMap.set(row.movieId, {
+          movieId: row.movieId,
+          title: row.title,
+          description: row.description,
+          duration: row.duration,
+          trailerUrl: row.trailerUrl,
+          posterUrl: row.posterUrl,
+          genres: new Set(),
+          actors: new Set(),
+          screenings: [],
+        });
+      }
+
+      const movie = moviesMap.get(row.movieId);
+      if (row.genreName) movie.genres.add(row.genreName);
+      if (row.actorName) movie.actors.add(row.actorName);
+    });
+
+    if (date) {
+      for (const [movieId, movie] of moviesMap) {
+        const screeningsQuery = db
+          .select({
+            startTime: screeningsTable.start_time,
+            auditoriumName: auditoriumsTable.name,
+          })
+          .from(screeningsTable)
+          .leftJoin(
+            auditoriumsTable,
+            eq(auditoriumsTable.auditorium_id, screeningsTable.auditorium_id)
+          )
+          .where(
+            and(
+              eq(screeningsTable.movie_id, movieId),
+              date
+                ? and(
+                    gte(screeningsTable.start_time, startDate),
+                    lt(screeningsTable.start_time, endDate)
+                  )
+                : undefined
+            )
+          );
+
+        const screenings = await screeningsQuery;
+
+        if (screenings.length > 0) {
+          movie.screenings = screenings.sort(
+            (a, b) =>
+              new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+          );
+        } else {
+          moviesMap.delete(movie.movieId);
+        }
+      }
+    }
+
+    const movies = Array.from(moviesMap.values()).map((movie) => ({
+      ...movie,
+      genres: Array.from(movie.genres),
+      actors: Array.from(movie.actors),
+      screenings: Array.from(movie.screenings).sort(
+        (a: any, b: any) =>
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      ),
+    }));
+
+    return movies;
+  } catch (error) {
+    throw new Error("Could not search");
+  }
 };

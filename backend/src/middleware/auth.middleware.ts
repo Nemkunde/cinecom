@@ -12,7 +12,7 @@ export const authenticateToken = (
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    req.user = { role: "guest" };
+    req.user = { role: "guest", userId: 0 };
     next();
     return;
   }

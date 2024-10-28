@@ -8,7 +8,7 @@ export const TicketSelectionCard: React.FC = () => {
       <h2 className="text-xl font-bold mb-4">Välj antal biljetter</h2>
       <TicketCounter label="Vuxen" />
       <TicketCounter label="Barn" />
-      <TicketCounter label="Senior" />
+      <TicketCounter label="Pensionär" />
     </div>
   );
 };

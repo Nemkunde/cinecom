@@ -5,6 +5,7 @@ import {
   deleteMovie,
   getAllMovies,
   getMovieById,
+  searchMovie,
   updateMovie,
 } from "../services/movies.service";
 
@@ -73,6 +74,7 @@ export const createNewMovie = async (req: Request, res: Response) => {
       title,
       description,
       duration,
+      age_limit,
       trailer_url,
       poster_url,
       director_ids,
@@ -84,6 +86,7 @@ export const createNewMovie = async (req: Request, res: Response) => {
       !title ||
       !description ||
       !duration ||
+      !age_limit ||
       !trailer_url ||
       !poster_url ||
       !director_ids ||
@@ -99,6 +102,7 @@ export const createNewMovie = async (req: Request, res: Response) => {
       title,
       description,
       duration,
+      age_limit,
       trailer_url,
       poster_url,
       director_ids: director_ids || [],
@@ -111,5 +115,24 @@ export const createNewMovie = async (req: Request, res: Response) => {
       .json({ message: "Movie successfully created", newMovie, success: true });
   } catch (error) {
     res.status(500).json({ error: "Failed to create movie", success: false });
+  }
+};
+
+export const search = async (req: Request, res: Response) => {
+  // const { title, genre, actorName } = req.query
+
+  const title = req.query.title as string | undefined;
+  const genre = req.query.genre as string | undefined;
+  const actorName = req.query.actorName as string | undefined;
+  const date = req.query.date as string | undefined;
+
+  try {
+    const movies = await searchMovie({ title, genre, actorName, date });
+    console.log("MOVIES", movies);
+    res.json(movies);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occured while searching for movies" });
   }
 };

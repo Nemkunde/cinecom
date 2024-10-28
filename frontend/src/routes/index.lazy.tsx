@@ -10,14 +10,14 @@ export const Route = createLazyFileRoute("/")({
 function Index() {
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/movies")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("DATA", data);
-        setMovies(data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/api/movies")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("DATA", data);
+  //       setMovies(data);
+  //     });
+  // }, []);
 
   if (movies.length === 0) {
     return <div>Loading...</div>;

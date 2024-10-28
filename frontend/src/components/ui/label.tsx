@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -10,6 +11,7 @@ const labelVariants = cva(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
 
+
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
@@ -20,6 +22,7 @@ const Label = React.forwardRef<
     className={cn(labelVariants(), className)}
     {...props}
   />
+
 ));
 Label.displayName = LabelPrimitive.Root.displayName;
 

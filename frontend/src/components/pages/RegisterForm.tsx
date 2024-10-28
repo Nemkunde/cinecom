@@ -53,9 +53,9 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="bg-primary w-full max-w-lg mx-auto text-white">
+    <Card className="bg-primary w-full max-w-lg mx-auto">
       <CardHeader>
-        <CardTitle>Register</CardTitle>
+        <CardTitle className="text-white">Registrera som medlem.</CardTitle>
       </CardHeader>
       <CardContent>
         {error && <p className="text-red-500">{error}</p>}
@@ -63,12 +63,12 @@ const RegisterForm = () => {
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="firstname">First Name</Label>
+              <Label htmlFor="firstname" className="text-white">Förnamn</Label>
               <Input className="bg-white"
                 id="firstname"
                 type="text"
                 name="firstname"
-                placeholder="First Name"
+                placeholder="Förnamn"
                 value={formData.firstname}
                 onChange={handleChange}
                 required
@@ -76,12 +76,12 @@ const RegisterForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="lastname">Last Name</Label>
+              <Label htmlFor="lastname" className="text-white">Efternamn</Label>
               <Input className="bg-white"
                 id="lastname"
                 type="text"
                 name="lastname"
-                placeholder="Last Name"
+                placeholder="Efternamn"
                 value={formData.lastname}
                 onChange={handleChange}
                 required
@@ -89,45 +89,43 @@ const RegisterForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-white">Mail</Label>
               <Input className="bg-white"
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="Mail"
                 value={formData.email}
                 onChange={handleChange}
                 required
               />
             </div>
-
             <div>
-              <Label htmlFor="password">Password</Label>
-              <Input className="bg-white"
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone" className="text-white">Telefon</Label>
               <Input className="bg-white"
                 id="phone"
                 type="tel"
                 name="phone"
-                placeholder="Phone Number"
+                placeholder="Telefon"
                 value={formData.phone}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <Button variant="outline">Register</Button>
+            <div>
+              <Label htmlFor="password" className="text-white">Lösenord</Label>
+              <Input className="bg-white"
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Lösenord"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <Button variant="outline" className="text-white">Registrera</Button>
 
           </div>
         </form>

@@ -50,22 +50,22 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="bg-primary w-full max-w-lg mx-auto">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle className="text-white">Logga in</CardTitle>
       </CardHeader>
       <CardContent>
         {error && <p className="text-red-500">{error}</p>}
-        {success && <p className="text-green-500">Login successful!</p>}
+        {success && <p className="text-green-500">Inloggning lyckades!</p>}
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
+              <Label htmlFor="email" className="text-white">Mail</Label>
+              <Input className="bg-white"
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="Mail"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -73,19 +73,19 @@ const LoginForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
+              <Label htmlFor="password" className="text-white">Lösenord</Label>
+              <Input className="bg-white"
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Password"
+                placeholder="Lösenord"
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <Button variant="outline">Login</Button>
+            <Button variant="outline" className="text-white">Logga in</Button>
           </div>
         </form>
       </CardContent>

@@ -32,7 +32,7 @@ export default {
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#F8C496",
           foreground: "hsl(var(--secondary-foreground))",
         },
         muted: {
@@ -40,7 +40,7 @@ export default {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: "#F0EBD6",
           foreground: "hsl(var(--accent-foreground))",
         },
         destructive: {

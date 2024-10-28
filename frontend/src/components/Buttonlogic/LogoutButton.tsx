@@ -5,18 +5,17 @@ import { Button } from "../ui/button";
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to log out?");
+   const handleLogout = () => {
+    const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
     if (confirmLogout) {
       localStorage.removeItem("token");
-      navigate({ to: "/account/login" }); 
-; 
+      navigate({ to: "/account/login" });
     }
   };
 
   return (
-    <Button onClick={handleLogout} variant="outline">
-      Logout
+    <Button onClick={handleLogout} variant="outline" className="text-white mt-4">
+      Logga ut
     </Button>
   );
 };

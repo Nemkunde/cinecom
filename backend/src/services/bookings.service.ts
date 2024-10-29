@@ -4,6 +4,7 @@ import {
   screeningsTable,
   seatsTable,
   ticketsTable,
+  ticketTypesTable,
 } from "../db/schema";
 import { and, eq, inArray } from "drizzle-orm";
 
@@ -65,14 +66,118 @@ const generateBookingReference = () => {
   return `${numbers}${letters}`;
 };
 
+// export const bookSeat = async ({
+//   seatIds,
+//   screeningId,
+//   userId,
+// }: {
+//   seatIds: number[];
+//   screeningId: number;
+//   userId: number;
+// }) => {
+//   return await db.transaction(async (tx) => {
+//     const screening = await tx
+//       .select({ auditorium_id: screeningsTable.auditorium_id })
+//       .from(screeningsTable)
+//       .where(eq(screeningsTable.screening_id, screeningId))
+//       .limit(1);
+
+//     if (!screening.length) {
+//       throw new Error("Screening not found");
+//     }
+
+//     const auditoriumId = screening[0].auditorium_id;
+
+//     const seatsInAuditorium = await tx
+//       .select({ seat_id: seatsTable.seat_id })
+//       .from(seatsTable)
+//       .where(
+//         and(
+//           eq(seatsTable.auditorium_id, auditoriumId),
+//           inArray(seatsTable.seat_id, seatIds)
+//         )
+//       );
+
+//     if (seatsInAuditorium.length !== seatIds.length) {
+//       throw new Error(
+//         "One or more of the selected seats do not belong to the correct auditorium"
+//       );
+//     }
+
+//     const alreadyBookedSeats = await tx
+//       .select({ seat_id: bookingsTable.seat_id })
+//       .from(bookingsTable)
+//       .where(
+//         and(
+//           eq(bookingsTable.screening_id, screeningId),
+//           inArray(bookingsTable.seat_id, seatIds)
+//         )
+//       );
+
+//     if (alreadyBookedSeats.length > 0) {
+//       const bookedSeatIds = alreadyBookedSeats.map((seat) => seat.seat_id);
+//       throw new Error(
+//         `The following seats are already booked: ${bookedSeatIds.join(", ")}`
+//       );
+//     }
+
+//     const bookingValues = seatIds.map((seatId) => ({
+//       screening_id: screeningId,
+//       user_id: userId,
+//       seat_id: seatId,
+//       total_price: 0,
+//     }));
+
+//     const bookings = await tx
+//       .insert(bookingsTable)
+//       .values(bookingValues)
+//       .returning();
+
+//     if (!bookings.length) {
+//       throw new Error("Failed to create booking");
+//     }
+
+//     let totalPrice = 0;
+
+//     for (const booking of bookings) {
+//       const [ticket] = await tx
+//         .insert(ticketsTable)
+//         .values({
+//           booking_id: booking.booking_id,
+//           ticket_price: 1000,
+//         })
+//         .returning();
+//       totalPrice += ticket.ticket_price;
+//     }
+
+//     const updatedBookings = await Promise.all(
+//       bookings.map((booking) =>
+//         tx
+//           .update(bookingsTable)
+//           .set({
+//             total_price: totalPrice,
+//             booking_reference: generateBookingReference(),
+//           })
+//           .where(eq(bookingsTable.booking_id, booking.booking_id))
+//           .returning()
+//       )
+//     );
+
+//     return updatedBookings;
+//   });
+// };
+
 export const bookSeat = async ({
   seatIds,
   screeningId,
   userId,
+  ticketTypeId,
 }: {
   seatIds: number[];
   screeningId: number;
   userId: number;
+  ticketTypeId: number; 
+  
 }) => {
   return await db.transaction(async (tx) => {
     const screening = await tx
@@ -86,7 +191,6 @@ export const bookSeat = async ({
     }
 
     const auditoriumId = screening[0].auditorium_id;
-
     const seatsInAuditorium = await tx
       .select({ seat_id: seatsTable.seat_id })
       .from(seatsTable)
@@ -120,11 +224,24 @@ export const bookSeat = async ({
       );
     }
 
+    const ticketType = await tx
+      .select({ ticket_type_price: ticketTypesTable.ticket_type_price })
+      .from(ticketTypesTable)
+      .where(eq(ticketTypesTable.ticket_type_id, ticketTypeId))
+      .limit(1);
+
+    if (!ticketType.length) {
+      throw new Error("Invalid ticket type selected");
+    }
+
+    const ticketPrice = ticketType[0].ticket_type_price;
     const bookingValues = seatIds.map((seatId) => ({
       screening_id: screeningId,
       user_id: userId,
       seat_id: seatId,
       total_price: 0,
+      ticket_type_id: ticketTypeId, 
+      booking_reference: generateBookingReference(),
     }));
 
     const bookings = await tx
@@ -138,17 +255,19 @@ export const bookSeat = async ({
 
     let totalPrice = 0;
 
+   
     for (const booking of bookings) {
       const [ticket] = await tx
         .insert(ticketsTable)
         .values({
           booking_id: booking.booking_id,
-          ticket_price: 1000,
+          ticket_price: ticketPrice, 
         })
         .returning();
       totalPrice += ticket.ticket_price;
     }
 
+    
     const updatedBookings = await Promise.all(
       bookings.map((booking) =>
         tx

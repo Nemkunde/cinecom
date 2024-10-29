@@ -1,9 +1,97 @@
-function Header() {
+import React, { useEffect, useState } from "react";
+import { Card, CardHeader } from "../ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { useLocation, useNavigate } from "@tanstack/react-router";
+
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  const updateLoginStatus = () => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  };
+  
+  useEffect(() => {
+    window.addEventListener("storage", updateLoginStatus);
+    return () => window.removeEventListener("storage", updateLoginStatus);
+  }, []);
+
+  useEffect(() => {
+    const protectedRoutes = ["/account/profile", "/account/bookings"];
+    if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
+      navigate({ to: "/account/login" });
+    }
+  }, [isLoggedIn, location.pathname, navigate]);
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
+    if (confirmLogout) {
+      localStorage.removeItem("token");
+      setIsLoggedIn(false); 
+      window.location.reload();
+      navigate({ to: "/account/login" }); 
+    }
+  };
+
   return (
-    <div className="absolute top-0 left-0 z-10 flex w-full items-center p-4 bg-black bg-opacity-50 text-white px-32">
-      <h1 className="font-bold text-5xl">Cinecom</h1>
-    </div>
+    <Card className="w-full bg-black text-white mb-6">
+      <CardHeader className="flex-row justify-between items-center px-4 py-6">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="ghost" className="text-white">
+              MENY
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => navigate({ to: "/screenings" })}>
+              VISNINGAR
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/movies" })}>
+              FILMER
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <img src="../img/Logo.png" alt="Cinecom Logo" className="h-12" />
+
+        <div className="flex space-x-6 items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="ghost" className="text-white">
+                MEDLEM
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => navigate({ to: "/account/profile" })}>
+                PROFIL
+              </DropdownMenuItem>
+              {!isLoggedIn ? (
+                <>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/account/register" })}>
+                    REGISTRERA ANVÄNDARE
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/account/login" })}>
+                    LOGGA IN
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem onClick={handleLogout}>
+                  LOGGA UT
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </CardHeader>
+    </Card>
   );
-}
+};
 
 export default Header;

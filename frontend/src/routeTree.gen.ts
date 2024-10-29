@@ -18,6 +18,9 @@ import { Route as ScreeningsIndexImport } from './routes/screenings/index'
 import { Route as MoviesIndexImport } from './routes/movies/index'
 import { Route as ScreeningsScreeningIdImport } from './routes/screenings/$screeningId'
 import { Route as MoviesMovieIdImport } from './routes/movies/$movieId'
+import { Route as AccountRegisterImport } from './routes/account/register'
+import { Route as AccountProfileImport } from './routes/account/profile'
+import { Route as AccountLoginImport } from './routes/account/login'
 
 // Create Virtual Routes
 
@@ -61,6 +64,24 @@ const MoviesMovieIdRoute = MoviesMovieIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AccountRegisterRoute = AccountRegisterImport.update({
+  id: '/account/register',
+  path: '/account/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountProfileRoute = AccountProfileImport.update({
+  id: '/account/profile',
+  path: '/account/profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountLoginRoute = AccountLoginImport.update({
+  id: '/account/login',
+  path: '/account/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -70,6 +91,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/login': {
+      id: '/account/login'
+      path: '/account/login'
+      fullPath: '/account/login'
+      preLoaderRoute: typeof AccountLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/profile': {
+      id: '/account/profile'
+      path: '/account/profile'
+      fullPath: '/account/profile'
+      preLoaderRoute: typeof AccountProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/account/register': {
+      id: '/account/register'
+      path: '/account/register'
+      fullPath: '/account/register'
+      preLoaderRoute: typeof AccountRegisterImport
       parentRoute: typeof rootRoute
     }
     '/movies/$movieId': {
@@ -114,6 +156,9 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/account/login': typeof AccountLoginRoute
+  '/account/profile': typeof AccountProfileRoute
+  '/account/register': typeof AccountRegisterRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies': typeof MoviesIndexRoute
@@ -123,6 +168,9 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/account/login': typeof AccountLoginRoute
+  '/account/profile': typeof AccountProfileRoute
+  '/account/register': typeof AccountRegisterRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies': typeof MoviesIndexRoute
@@ -133,6 +181,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/account/login': typeof AccountLoginRoute
+  '/account/profile': typeof AccountProfileRoute
+  '/account/register': typeof AccountRegisterRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies/': typeof MoviesIndexRoute
@@ -144,6 +195,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account/login'
+    | '/account/profile'
+    | '/account/register'
     | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies'
@@ -152,6 +206,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/account/login'
+    | '/account/profile'
+    | '/account/register'
     | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies'
@@ -160,6 +220,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+  id:
+    | '__root__'
+    | '/'
+    | '/account/login'
+    | '/account/profile'
+    | '/account/register'
     | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies/'
@@ -170,6 +236,9 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  AccountLoginRoute: typeof AccountLoginRoute
+  AccountProfileRoute: typeof AccountProfileRoute
+  AccountRegisterRoute: typeof AccountRegisterRoute
   MoviesMovieIdRoute: typeof MoviesMovieIdRoute
   ScreeningsScreeningIdRoute: typeof ScreeningsScreeningIdRoute
   MoviesIndexRoute: typeof MoviesIndexRoute
@@ -179,6 +248,9 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AccountLoginRoute: AccountLoginRoute,
+  AccountProfileRoute: AccountProfileRoute,
+  AccountRegisterRoute: AccountRegisterRoute,
   MoviesMovieIdRoute: MoviesMovieIdRoute,
   ScreeningsScreeningIdRoute: ScreeningsScreeningIdRoute,
   MoviesIndexRoute: MoviesIndexRoute,
@@ -199,6 +271,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/account/login",
+        "/account/profile",
+        "/account/register",
         "/movies/$movieId",
         "/screenings/$screeningId",
         "/movies/",
@@ -208,6 +283,15 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/account/login": {
+      "filePath": "account/login.tsx"
+    },
+    "/account/profile": {
+      "filePath": "account/profile.tsx"
+    },
+    "/account/register": {
+      "filePath": "account/register.tsx"
     },
     "/movies/$movieId": {
       "filePath": "movies/$movieId.tsx"

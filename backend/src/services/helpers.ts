@@ -21,6 +21,7 @@ export interface Movies {
   actor_ids: number[];
   director_ids: number[];
   genre_ids: number[];
+  language: string | null;
 }
 
 interface ExtendedMovies {
@@ -34,6 +35,7 @@ interface ExtendedMovies {
   director: string | null;
   genre: string | null;
   actors: string | null;
+  language: string | null;
 }
 
 export const movieDbCall = (single: boolean, movieId?: number) => {
@@ -49,6 +51,7 @@ export const movieDbCall = (single: boolean, movieId?: number) => {
       director: directorsTable.director_name,
       genre: genresTable.genre_name,
       actors: actorsTable.actor_name,
+      language: moviesTable.language,
     })
     .from(moviesTable)
     .leftJoin(
@@ -91,6 +94,7 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
       genre,
       actors,
       director,
+      language,
     }) => {
       if (!moviesMap.has(movieId)) {
         moviesMap.set(movieId, {
@@ -103,6 +107,7 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
           director: [],
           genres: [],
           actors: [],
+          language,
         });
       }
 

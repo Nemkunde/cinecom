@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import BookTicketButton from "src/components/Buttonlogic/BookTicket";
 import Seatmap from "src/components/Seatmap/Seatmap";
 import { TicketSelectionCard } from "src/components/ui/TicketSelectionCard";
 
@@ -6,10 +7,11 @@ const TicketSelector = () => {
   const { screeningId } = Route.useParams();
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center">
       <div className="space-y-8 text-center">
         <TicketSelectionCard /> 
         <Seatmap screeningsId={+screeningId} />
+        <BookTicketButton seatIds={[1, 2]} screeningId={1} userId={41}/>
       </div>
     </div>
   );

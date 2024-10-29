@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import LogoutButton from "../Buttonlogic/LogoutButton";
+import RemoveBookingButton from "../Buttonlogic/DeleteBooking";
 
 const Profile = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -69,6 +70,7 @@ const Profile = () => {
         {activeTab === "bookings" && (
           <div className="text-white p-2">
             <p>Bokningar.</p>
+            <RemoveBookingButton bookingId={0} />
             <LogoutButton />
           </div>
         )}

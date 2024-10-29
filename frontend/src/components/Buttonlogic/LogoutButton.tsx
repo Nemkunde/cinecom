@@ -9,6 +9,7 @@ const LogoutButton: React.FC = () => {
     const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
     if (confirmLogout) {
       localStorage.removeItem("token");
+      window.location.reload();
       navigate({ to: "/account/login" });
     }
   };

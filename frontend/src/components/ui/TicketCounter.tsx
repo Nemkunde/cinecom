@@ -1,4 +1,4 @@
-// src/ui/TicketCounter.tsx
+
 import React, { useState } from "react";
 
 interface TicketCounterProps {

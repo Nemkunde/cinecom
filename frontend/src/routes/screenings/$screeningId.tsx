@@ -3,14 +3,14 @@ import Seatmap from "src/components/Seatmap/Seatmap";
 import { TicketSelectionCard } from "src/components/ui/TicketSelectionCard";
 import { TicketSummaryCard } from "src/components/ui/TicketSummaryCard";
 
-// Exempeldata för TicketSummaryCard
+
 const tickets = [
-  { type: "Vuxen", quantity: 2, price: 120 },
-  { type: "Barn", quantity: 1, price: 80 },
-  { type: "Student", quantity: 1, price: 100 },
+  { type: "Vuxen", quantity: 1, price: 140 },
+  { type: "Barn", quantity: 0, price: 80 },
+  { type: "Pensionär", quantity: 0, price: 120 },
 ];
 
-// TicketSelector-komponenten
+
 const TicketSelector = () => {
   const { screeningId } = Route.useParams();
 
@@ -25,7 +25,7 @@ const TicketSelector = () => {
   );
 };
 
-// Definiera rutt för TicketSelector
+
 export const Route = createFileRoute("/screenings/$screeningId")({
   component: TicketSelector,
 });
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/screenings/$screeningId")({
 //   );
 // };
 
-// // export default TicketSummary;
+// 
 // export const Routetickets = createFileRoute("/screenings/$screeningId")({
 //   component: TicketSummary,
 // });

@@ -18,7 +18,7 @@ export const TicketSummaryCard: React.FC<TicketSummaryCardProps> = ({ tickets })
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md max-w-md mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Sammanfattning av biljetter</h2>
+      <h2 className="text-xl font-semibold mb-4">Summering</h2>
       <ul className="space-y-2">
         {tickets.map((ticket, index) => (
           <li key={index} className="flex justify-between">

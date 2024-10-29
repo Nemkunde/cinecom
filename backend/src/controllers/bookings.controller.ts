@@ -44,10 +44,21 @@ export const getAllBookedSeats = async (req: Request, res: Response) => {
   }
 };
 
+// export const createBooking = async (req: Request, res: Response) => {
+//   try {
+//     const { seatIds, screeningId, userId } = req.body;
+//     const booking = await bookSeat({ seatIds, screeningId, userId });
+//     res.json({ success: true, booking });
+//   } catch (error: any) {
+//     console.error(error);
+//     res.status(400).json({ success: false, error: error.message });
+//   }
+// };
+
 export const createBooking = async (req: Request, res: Response) => {
   try {
-    const { seatIds, screeningId, userId } = req.body;
-    const booking = await bookSeat({ seatIds, screeningId, userId });
+    const { seatIds, screeningId, userId, ticketTypeId, } = req.body;
+    const booking = await bookSeat({ seatIds, screeningId, userId, ticketTypeId, });
     res.json({ success: true, booking });
   } catch (error: any) {
     console.error(error);

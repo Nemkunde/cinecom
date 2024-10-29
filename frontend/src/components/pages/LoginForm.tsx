@@ -39,10 +39,13 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
+      localStorage.setItem("token", result.token); // Store token for login status
       setSuccess(true);
-      navigate({ to: "/account/profile" }); 
+      
+      // Update the header state here
+      window.dispatchEvent(new Event("storage")); // Trigger storage event to update header state
 
-      localStorage.setItem("token", result.token);
+      navigate({ to: "/" }); // Redirect to profile
     } catch (error) {
       setError("Failed to log in");
       console.error("Login error:", error);
@@ -61,7 +64,8 @@ const LoginForm = () => {
           <div className="space-y-4">
             <div>
               <Label htmlFor="email" className="text-white">Mail</Label>
-              <Input className="bg-white"
+              <Input
+                className="bg-white"
                 id="email"
                 type="email"
                 name="email"
@@ -74,7 +78,8 @@ const LoginForm = () => {
 
             <div>
               <Label htmlFor="password" className="text-white">Lösenord</Label>
-              <Input className="bg-white"
+              <Input
+                className="bg-white"
                 id="password"
                 type="password"
                 name="password"
@@ -85,7 +90,9 @@ const LoginForm = () => {
               />
             </div>
 
-            <Button variant="outline" className="text-white">Logga in</Button>
+            <Button variant="outline" className="text-white" type="submit">
+              Logga in
+            </Button>
           </div>
         </form>
       </CardContent>

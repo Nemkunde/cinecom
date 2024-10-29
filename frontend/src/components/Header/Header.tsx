@@ -17,14 +17,12 @@ const Header: React.FC = () => {
   const updateLoginStatus = () => {
     setIsLoggedIn(!!localStorage.getItem("token"));
   };
-
-  // Update `isLoggedIn` on token change
+  
   useEffect(() => {
     window.addEventListener("storage", updateLoginStatus);
     return () => window.removeEventListener("storage", updateLoginStatus);
   }, []);
 
-  // Redirect to login if trying to access protected routes while logged out
   useEffect(() => {
     const protectedRoutes = ["/account/profile", "/account/bookings"];
     if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
@@ -36,8 +34,9 @@ const Header: React.FC = () => {
     const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
     if (confirmLogout) {
       localStorage.removeItem("token");
-      setIsLoggedIn(false); // Update state immediately
-      navigate({ to: "/account/login" }); // Navigate after setting state
+      setIsLoggedIn(false); 
+      window.location.reload();
+      navigate({ to: "/account/login" }); 
     }
   };
 

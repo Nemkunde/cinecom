@@ -39,13 +39,12 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
-      localStorage.setItem("token", result.token); // Store token for login status
+      localStorage.setItem("token", result.token); 
       setSuccess(true);
       
-      // Update the header state here
-      window.dispatchEvent(new Event("storage")); // Trigger storage event to update header state
+      window.dispatchEvent(new Event("storage")); 
 
-      navigate({ to: "/" }); // Redirect to profile
+      navigate({ to: "/" }); 
     } catch (error) {
       setError("Failed to log in");
       console.error("Login error:", error);

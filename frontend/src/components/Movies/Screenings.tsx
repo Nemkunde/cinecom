@@ -4,10 +4,11 @@ import ScreeningBox from "./ScreeningBox";
 
 interface Props {
   screenings: any[];
+  movie: any;
   thumbnail: string;
 }
 
-function Screenings({ screenings, thumbnail }: Props) {
+function Screenings({ movie, screenings, thumbnail }: Props) {
   return (
     <div className="flex flex-col w-full gap-4">
       <h2 className="text-4xl font-bold uppercase text-[#F0EBD6]">
@@ -19,6 +20,8 @@ function Screenings({ screenings, thumbnail }: Props) {
           movie={screening.movie}
           startTime={screening.startTime}
           thumbnail={thumbnail}
+          genres={movie.genres}
+          language={movie.language}
         />
       ))}
     </div>

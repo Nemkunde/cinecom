@@ -7,9 +7,18 @@ interface Props {
   movie: string;
   startTime: string;
   thumbnail: string;
+  genres: any[];
+  language: string;
 }
 
-function ScreeningBox({ auditorium, movie, startTime, thumbnail }: Props) {
+function ScreeningBox({
+  auditorium,
+  movie,
+  startTime,
+  thumbnail,
+  genres,
+  language,
+}: Props) {
   return (
     <div className="flex-col">
       <div className="text-2xl text-[#F8C496] mb-4">
@@ -23,6 +32,12 @@ function ScreeningBox({ auditorium, movie, startTime, thumbnail }: Props) {
           <div className="flex flex-col text-black">
             <span className="text-2xl font-bold">{movie}</span>
             <span>{auditorium}</span>
+            <div className="flex gap-2">
+              {genres.map((genre) => (
+                <span>{genre}</span>
+              ))}
+            </div>
+            <span>{language}</span>
             <span>{format(new Date(startTime), "HH:mm")}</span>
           </div>
         </div>

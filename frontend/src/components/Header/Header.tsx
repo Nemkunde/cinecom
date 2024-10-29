@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, CardHeader, CardTitle } from "../ui/card";
+import React, { useEffect, useState } from "react";
+import { Card, CardHeader } from "../ui/card";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -7,57 +7,87 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { Search } from "lucide-react"; 
-import { useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  const updateLoginStatus = () => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  };
+  
+  useEffect(() => {
+    window.addEventListener("storage", updateLoginStatus);
+    return () => window.removeEventListener("storage", updateLoginStatus);
+  }, []);
+
+  useEffect(() => {
+    const protectedRoutes = ["/account/profile", "/account/bookings"];
+    if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
+      navigate({ to: "/account/login" });
+    }
+  }, [isLoggedIn, location.pathname, navigate]);
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
+    if (confirmLogout) {
+      localStorage.removeItem("token");
+      setIsLoggedIn(false); 
+      window.location.reload();
+      navigate({ to: "/account/login" }); 
+    }
+  };
+
   return (
     <Card className="w-full bg-black text-white mb-6">
       <CardHeader className="flex-row justify-between items-center px-4 py-6">
-        <div className="flex items-center space-x-4">
-          <img
-            src="/path-to-logo.png"
-            alt="Cinecom Logo"
-            className="h-8"
-          />
-          <CardTitle className="text-2xl font-bold tracking-wide">CINECOM</CardTitle>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" className="text-white">
-                MENY
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => console.log("Action 1")}>Action 1</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => console.log("Action 2")}>Action 2</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="ghost" className="text-white">
+              MENY
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => navigate({ to: "/screenings" })}>
+              VISNINGAR
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/movies" })}>
+              FILMER
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <img src="../img/Logo.png" alt="Cinecom Logo" className="h-12" />
 
         <div className="flex space-x-6 items-center">
-          
-
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Button variant="ghost" className="text-white">
-                MEDLEMSINLOGGNING
+                MEDLEM
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => navigate({to: "/account/profile"})}>
-                PROFILE
+              <DropdownMenuItem onClick={() => navigate({ to: "/account/profile" })}>
+                PROFIL
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate({to: "/account/register"})}>
-                REGISTER
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate({to: "/account/login"})}>
-                LOGIN
-              </DropdownMenuItem>
+              {!isLoggedIn ? (
+                <>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/account/register" })}>
+                    REGISTRERA ANVÄNDARE
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate({ to: "/account/login" })}>
+                    LOGGA IN
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem onClick={handleLogout}>
+                  LOGGA UT
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Search className="h-6 w-6 cursor-pointer" />
         </div>
       </CardHeader>
     </Card>

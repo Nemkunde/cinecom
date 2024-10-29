@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardHeader} from "../ui/card";
+import { Card, CardHeader } from "../ui/card";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -9,17 +9,22 @@ import {
 import { Button } from "../ui/button";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 
-
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
+  const updateLoginStatus = () => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  };
+
+  // Update `isLoggedIn` on token change
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+    window.addEventListener("storage", updateLoginStatus);
+    return () => window.removeEventListener("storage", updateLoginStatus);
   }, []);
-  
+
+  // Redirect to login if trying to access protected routes while logged out
   useEffect(() => {
     const protectedRoutes = ["/account/profile", "/account/bookings"];
     if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
@@ -30,12 +35,13 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
     if (confirmLogout) {
-      setIsLoggedIn(false);
       localStorage.removeItem("token");
-      navigate({ to: "/" }); 
+      setIsLoggedIn(false); // Update state immediately
+      navigate({ to: "/account/login" }); // Navigate after setting state
     }
   };
- return (
+
+  return (
     <Card className="w-full bg-black text-white mb-6">
       <CardHeader className="flex-row justify-between items-center px-4 py-6">
         <DropdownMenu>
@@ -53,12 +59,8 @@ const Header: React.FC = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        
-        <img
-          src="../img/Logo.png"
-          alt="Cinecom Logo"
-          className="h-12"
-        />
+
+        <img src="../img/Logo.png" alt="Cinecom Logo" className="h-12" />
 
         <div className="flex space-x-6 items-center">
           <DropdownMenu>
@@ -92,6 +94,5 @@ const Header: React.FC = () => {
     </Card>
   );
 };
-
 
 export default Header;

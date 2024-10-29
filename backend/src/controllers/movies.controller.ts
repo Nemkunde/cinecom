@@ -80,6 +80,7 @@ export const createNewMovie = async (req: Request, res: Response) => {
       director_ids,
       actor_ids,
       genre_ids,
+      language,
     } = req.body;
 
     if (
@@ -91,7 +92,8 @@ export const createNewMovie = async (req: Request, res: Response) => {
       !poster_url ||
       !director_ids ||
       !actor_ids ||
-      !genre_ids
+      !genre_ids ||
+      !language
     ) {
       res
         .status(400)
@@ -108,6 +110,7 @@ export const createNewMovie = async (req: Request, res: Response) => {
       director_ids: director_ids || [],
       actor_ids: actor_ids || [],
       genre_ids: genre_ids || [],
+      language,
     });
 
     res
@@ -119,15 +122,22 @@ export const createNewMovie = async (req: Request, res: Response) => {
 };
 
 export const search = async (req: Request, res: Response) => {
-  // const { title, genre, actorName } = req.query
-
   const title = req.query.title as string | undefined;
   const genre = req.query.genre as string | undefined;
   const actorName = req.query.actorName as string | undefined;
   const date = req.query.date as string | undefined;
+  const ageLimit = req.query.ageLimit as number | undefined;
+  const language = req.query.language as string | undefined;
 
   try {
-    const movies = await searchMovie({ title, genre, actorName, date });
+    const movies = await searchMovie({
+      title,
+      genre,
+      actorName,
+      date,
+      ageLimit,
+      language,
+    });
     console.log("MOVIES", movies);
     res.json(movies);
   } catch (error) {

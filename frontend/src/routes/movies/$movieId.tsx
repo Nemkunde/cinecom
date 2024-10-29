@@ -61,9 +61,6 @@ export const Route = createFileRoute("/movies/$movieId")({
                 <p className="text-[32px] sm:text-[72px] font-bold text-white">
                   {movie.title}
                 </p>
-                {/* <p className="text-[18px] sm:text-[24px] text-white max-w-[640px]">
-                  {movie.description}
-                </p> */}
                 <Dialog>
                   <DialogTrigger className="p-2">
                     {/* <Button variant="outline" size="lg"> */}
@@ -99,6 +96,11 @@ export const Route = createFileRoute("/movies/$movieId")({
                 </div>
                 <div className="w-full h-[2px] bg-[#F0EBD6]" />
                 <div className="flex justify-between">
+                  <span>Språk</span>
+                  <span>{movie.language}</span>
+                </div>
+                <div className="w-full h-[2px] bg-[#F0EBD6]" />
+                <div className="flex justify-between">
                   <span>Genre</span>
                   <div className="flex gap-2">
                     {movie?.genres?.map((genre) => <span>{genre}</span>)}
@@ -117,13 +119,19 @@ export const Route = createFileRoute("/movies/$movieId")({
                 <div className="flex justify-between">
                   <span>Skådespelare</span>
                   <div className="flex gap-2">
-                    {movie?.actors?.map((actor) => <span>{actor}</span>)}
+                    {movie?.actors?.map((actor) => (
+                      <span className="gap-2">{actor} </span>
+                    ))}
                   </div>
                 </div>
               </div>
             </MovieInformationBox>
           </div>
-          <Screenings screenings={screenings} thumbnail={movie.poster_url} />
+          <Screenings
+            movie={movie}
+            screenings={screenings}
+            thumbnail={movie.poster_url}
+          />
         </div>
       </>
     );

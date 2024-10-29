@@ -115,6 +115,8 @@ interface SearchCriteria {
   genre?: string;
   actorName?: string;
   date?: string;
+  ageLimit?: number;
+  language?: string;
 }
 
 export const searchMovie = async ({
@@ -122,6 +124,8 @@ export const searchMovie = async ({
   genre,
   actorName,
   date,
+  ageLimit,
+  language,
 }: SearchCriteria) => {
   try {
     let startDate: any;
@@ -145,6 +149,8 @@ export const searchMovie = async ({
         posterUrl: moviesTable.poster_url,
         genreName: genresTable.genre_name,
         actorName: actorsTable.actor_name,
+        ageLimit: moviesTable.age_limit,
+        language: moviesTable.language,
       })
       .from(moviesTable)
       .leftJoin(
@@ -169,7 +175,9 @@ export const searchMovie = async ({
           genre ? ilike(genresTable.genre_name, `%${genre}%`) : undefined,
           actorName
             ? ilike(actorsTable.actor_name, `%${actorName}%`)
-            : undefined
+            : undefined,
+          ageLimit ? eq(moviesTable.age_limit, ageLimit) : undefined,
+          language ? eq(moviesTable.language, language) : undefined
         )
       );
 
@@ -187,6 +195,8 @@ export const searchMovie = async ({
           genres: new Set(),
           actors: new Set(),
           screenings: [],
+          ageLimit: row.ageLimit,
+          language: row.language,
         });
       }
 
@@ -195,40 +205,38 @@ export const searchMovie = async ({
       if (row.actorName) movie.actors.add(row.actorName);
     });
 
-    if (date) {
-      for (const [movieId, movie] of moviesMap) {
-        const screeningsQuery = db
-          .select({
-            startTime: screeningsTable.start_time,
-            auditoriumName: auditoriumsTable.name,
-          })
-          .from(screeningsTable)
-          .leftJoin(
-            auditoriumsTable,
-            eq(auditoriumsTable.auditorium_id, screeningsTable.auditorium_id)
+    for (const [movieId, movie] of moviesMap) {
+      const screeningsQuery = db
+        .select({
+          startTime: screeningsTable.start_time,
+          auditoriumName: auditoriumsTable.name,
+        })
+        .from(screeningsTable)
+        .leftJoin(
+          auditoriumsTable,
+          eq(auditoriumsTable.auditorium_id, screeningsTable.auditorium_id)
+        )
+        .where(
+          and(
+            eq(screeningsTable.movie_id, movieId),
+            date
+              ? and(
+                  gte(screeningsTable.start_time, startDate),
+                  lt(screeningsTable.start_time, endDate)
+                )
+              : undefined
           )
-          .where(
-            and(
-              eq(screeningsTable.movie_id, movieId),
-              date
-                ? and(
-                    gte(screeningsTable.start_time, startDate),
-                    lt(screeningsTable.start_time, endDate)
-                  )
-                : undefined
-            )
-          );
+        );
 
-        const screenings = await screeningsQuery;
+      const screenings = await screeningsQuery;
 
-        if (screenings.length > 0) {
-          movie.screenings = screenings.sort(
-            (a, b) =>
-              new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-          );
-        } else {
-          moviesMap.delete(movie.movieId);
-        }
+      if (screenings.length > 0) {
+        movie.screenings = screenings.sort(
+          (a, b) =>
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+        );
+      } else if (date) {
+        moviesMap.delete(movie.movieId);
       }
     }
 

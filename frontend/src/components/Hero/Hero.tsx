@@ -38,7 +38,7 @@ function Hero() {
         {movies.map((movie, index) => (
           <CarouselItem key={index}>
             <div
-              className="flex items-center justify-center w-full h-screen bg-no-repeat bg-center bg-cover relative"
+              className="flex items-center justify-center w-full h-[80vh] bg-no-repeat bg-center bg-cover relative"
               style={{
                 backgroundImage: `url(${movie.poster_url})`,
               }}

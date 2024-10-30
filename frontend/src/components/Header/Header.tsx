@@ -50,16 +50,22 @@ const Header: React.FC = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate({ to: "/screenings" })}>
+            <DropdownMenuItem onClick={() => navigate({ to: "/homepage" })}>
+              HEM
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/screenings/1" })}>
               VISNINGAR
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/movies" })}>
+            <DropdownMenuItem onClick={() => navigate({ to: "/movies/2" })}>
               FILMER
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/search" })}>
+              SÖK
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <img src="../img/Logo.png" alt="Cinecom Logo" className="h-12" />
+        <img src="../img/Logo.png" alt="Cinecom Logo" className="h-12 cursor-pointer" onClick={() => navigate({ to: "/homepage"})} />
 
         <div className="flex space-x-6 items-center">
           <DropdownMenu>

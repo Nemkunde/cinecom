@@ -34,7 +34,7 @@ const BookTicketButton: React.FC<BookTicketButtonProps> = ({ seatIds, screeningI
   };
 
   return (
-    <Button onClick={handleBookTickets} variant="outline" className="mt-4 text-white">
+    <Button onClick={handleBookTickets} variant="outline" className="mt-4 text-white bg-[#B71313]">
       Boka biljett
     </Button>
   );

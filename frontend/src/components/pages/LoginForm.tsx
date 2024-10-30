@@ -44,7 +44,7 @@ const LoginForm = () => {
       
       window.dispatchEvent(new Event("storage")); 
 
-      navigate({ to: "/" }); 
+      navigate({ to: "/homepage" }); 
     } catch (error) {
       setError("Failed to log in");
       console.error("Login error:", error);
@@ -52,7 +52,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="bg-primary w-full max-w-lg mx-auto">
+    <Card className="bg-[#121D3B] w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle className="text-white">Logga in</CardTitle>
       </CardHeader>
@@ -89,7 +89,7 @@ const LoginForm = () => {
               />
             </div>
 
-            <Button variant="outline" className="text-white" type="submit">
+            <Button variant="outline" className="text-white bg-[#B71313]" type="submit">
               Logga in
             </Button>
           </div>

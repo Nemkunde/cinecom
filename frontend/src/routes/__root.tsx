@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-
+import Footer from "src/components/Footer/Footer";
 import Header from "src/components/Header/Header";
 
 // import Hero from "src/components/Hero/Hero";
@@ -11,11 +11,14 @@ export const Route = createRootRoute({
 
     <div className="relative flex flex-col w-full h-screen">
       <Header />
-    
+      <div className="flex-grow">
+      <Outlet />
+
+      </div>
       {/* <Hero /> */}
       {/* <Seatmap screeningsId={3} /> */}
-      <Outlet />
-      <TanStackRouterDevtools />
+      <Footer/>
+
     </div>
   ),
 });

@@ -36,9 +36,9 @@ const Profile = () => {
   }
 
   return (
-    <Card className="bg-primary w-full max-w-lg mx-auto">
+    <Card className="bg-[#121D3B] w-full max-w-lg mx-auto">
       
-      <div className="flex justify-around bg-primary text-white m-2">
+      <div className="flex justify-around bg-[#121D3B] text-white m-2">
         <button
           className={`py-2 px-4 ${activeTab === "profile" ? "font-bold border-b-2" : ""}`}
           onClick={() => setActiveTab("profile")}

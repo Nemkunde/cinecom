@@ -30,7 +30,7 @@ const RemoveBookingButton: React.FC<RemoveBookingButtonProps> = ({ bookingId }) 
   };
 
   return (
-    <Button onClick={handleRemoveBooking} variant="outline" className="mt-4">
+    <Button onClick={handleRemoveBooking} variant="outline" className="mt-4 bg-[#B71313]">
       Radera bokning
     </Button>
   );

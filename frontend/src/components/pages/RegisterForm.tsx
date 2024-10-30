@@ -53,7 +53,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="bg-primary w-full max-w-lg mx-auto">
+    <Card className="bg-[#121D3B] w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle className="text-white">Registrera som medlem.</CardTitle>
       </CardHeader>
@@ -125,7 +125,7 @@ const RegisterForm = () => {
                 required
               />
             </div>
-            <Button variant="outline" className="text-white">Registrera</Button>
+            <Button variant="outline" className="text-white bg-[#B71313]">Registrera</Button>
 
           </div>
         </form>

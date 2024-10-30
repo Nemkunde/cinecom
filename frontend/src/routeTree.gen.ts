@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as HomepageImport } from './routes/homepage'
 import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as ScreeningsIndexImport } from './routes/screenings/index'
 import { Route as MoviesIndexImport } from './routes/movies/index'
@@ -27,6 +28,12 @@ import { Route as AccountLoginImport } from './routes/account/login'
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const HomepageRoute = HomepageImport.update({
+  id: '/homepage',
+  path: '/homepage',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -93,6 +100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/homepage': {
+      id: '/homepage'
+      path: '/homepage'
+      fullPath: '/homepage'
+      preLoaderRoute: typeof HomepageImport
+      parentRoute: typeof rootRoute
+    }
     '/account/login': {
       id: '/account/login'
       path: '/account/login'
@@ -156,6 +170,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/homepage': typeof HomepageRoute
   '/account/login': typeof AccountLoginRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
@@ -168,6 +183,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/homepage': typeof HomepageRoute
   '/account/login': typeof AccountLoginRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
@@ -181,6 +197,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/homepage': typeof HomepageRoute
   '/account/login': typeof AccountLoginRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
@@ -195,6 +212,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/homepage'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
@@ -206,6 +224,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/homepage'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
@@ -217,6 +236,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/homepage'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
@@ -230,6 +250,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  HomepageRoute: typeof HomepageRoute
   AccountLoginRoute: typeof AccountLoginRoute
   AccountProfileRoute: typeof AccountProfileRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
@@ -242,6 +263,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  HomepageRoute: HomepageRoute,
   AccountLoginRoute: AccountLoginRoute,
   AccountProfileRoute: AccountProfileRoute,
   AccountRegisterRoute: AccountRegisterRoute,
@@ -265,6 +287,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/homepage",
         "/account/login",
         "/account/profile",
         "/account/register",
@@ -277,6 +300,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/homepage": {
+      "filePath": "homepage.tsx"
     },
     "/account/login": {
       "filePath": "account/login.tsx"

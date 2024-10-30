@@ -206,9 +206,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
@@ -217,9 +214,6 @@ export interface FileRouteTypes {
     | '/movies'
     | '/screenings'
     | '/search'
-  id:
-    | '__root__'
-    | '/'
   id:
     | '__root__'
     | '/'

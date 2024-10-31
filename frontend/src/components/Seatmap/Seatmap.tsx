@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { generateSeatingArrangement } from "src/utils/seatingUtils";
 
 type Seat = {
   seat_id: number;
@@ -8,16 +7,40 @@ type Seat = {
   status: "available" | "booked";
 };
 
-function Seatmap({ salong }: { salong: "stor" | "liten" }) {
+function Seatmap({ screeningId }: { screeningId: number }) {
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]); // Saves chosen seats
 
   useEffect(() => {
-    console.log("Salong i Seatmap", salong);
-    const arrangement = generateSeatingArrangement(salong);
-    setSeats(arrangement);
-    console.log(arrangement);
-  }, [salong]);
+    // Kontrollera att screeningId är korrekt
+    console.log("Current screeningId:", screeningId);
+
+    if (!screeningId) {
+      console.error("Invalid screeningId provided:", screeningId);
+      return; // Avbryt om screeningId är ogiltigt
+    }
+
+    // API-anrop för att hämta sittplatser för den specifika visningen
+    const fetchSeats = async () => {
+      try {
+        const res = await fetch(`/api/seats/seatmap/${screeningId}`);
+        const data = await res.json();
+
+        console.log("Fetched seats:", data); // Loggar de hämtade sittplatserna
+
+        if (Array.isArray(data)) {
+          setSeats(data);
+        } else {
+          console.error("Expected an array but got:", data);
+          setSeats([]);
+        }
+      } catch (error) {
+        console.error("Error fetching seats:", error);
+      }
+    };
+
+    fetchSeats();
+  }, [screeningId]);
 
   const groupSeatsByRow = (seats: Seat[]) => {
     const grouped = seats.reduce((acc: Record<string, Seat[]>, seat) => {
@@ -55,13 +78,15 @@ function Seatmap({ salong }: { salong: "stor" | "liten" }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ seatsIds: selectedSeats, userId: 1 }),
+        body: JSON.stringify({ screeningId, seatsIds: selectedSeats, userId: 1 }), // Inkluderar `screeningId` i bokningen
       });
       const result = await response.json();
       if (response.ok) {
         alert("Platser bokade framgångsrikt!");
         setSelectedSeats([]);
-        setSeats(generateSeatingArrangement(salong));
+        // Hämta uppdaterade sittplatser efter bokning
+        const updatedSeats = await fetch(`/api/seats/seatmap/${screeningId}`);
+        setSeats(await updatedSeats.json());
       } else {
         alert(result.error || "Vissa platser är redan bokade.");
       }
@@ -70,6 +95,7 @@ function Seatmap({ salong }: { salong: "stor" | "liten" }) {
       alert("Fel vid bokning. Försök igen.");
     }
   };
+
   
   const seatsByRow = groupSeatsByRow(seats);
 

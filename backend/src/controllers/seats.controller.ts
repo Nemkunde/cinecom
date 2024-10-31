@@ -3,6 +3,7 @@ import {
   getAllSeats,
   getAllSeatsByAuditorium,
   seatMap,
+  bookSeatsForScreening
 } from "../services/seats.service";
 
 export const getSeats = async (req: Request, res: Response) => {
@@ -51,5 +52,25 @@ export const getSeatMap = async (req: Request, res: Response) => {
     res.status(200).json(mapOfSeats);
   } catch (error) {
     res.status(500).json({ error: "Could not get seatmap" });
+  }
+};
+
+export const bookSeats = async (req: Request, res: Response) => {
+  try {
+    const { screeningId, seatsId, userId } = req.body;
+
+    if (!screeningId || !seatsId || seatsId.length === 0 || !userId) {
+      return res.status(400).json({ error: "Missing booking details" });
+    }
+
+    const bookingResult = await bookSeatsForScreening(screeningId, seatsId, userId);
+
+    if (bookingResult.success) {
+      res.status(200).json({ message: "Seats booked successfully", bookedSeats: bookingResult.bookedSeats });
+    } else {
+      res.status(409).json({ error: "Some seats are already booked", failedSeats: bookingResult.failedSeats });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to book seats" });
   }
 };

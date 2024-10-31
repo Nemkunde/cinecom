@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { generateSeatingArrangement } from "src/utils/seatingUtils";
 
 type Seat = {
   seat_id: number;
@@ -7,17 +8,16 @@ type Seat = {
   status: "available" | "booked";
 };
 
-function Seatmap({ screeningsId }: { screeningsId: number }) {
+function Seatmap({ salong }: { salong: "stor" | "liten" }) {
   const [seats, setSeats] = useState<Seat[]>([]);
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]); // Saves chosen seats
 
   useEffect(() => {
-    const fetchSeats = async () => {
-      const res = await fetch(`/api/seats/seatmap/${screeningsId}`);
-      const data = await res.json();
-      setSeats(data);
-    };
-    fetchSeats();
-  }, [screeningsId]);
+    console.log("Salong i Seatmap", salong);
+    const arrangement = generateSeatingArrangement(salong);
+    setSeats(arrangement);
+    console.log(arrangement);
+  }, [salong]);
 
   const groupSeatsByRow = (seats: Seat[]) => {
     const grouped = seats.reduce((acc: Record<string, Seat[]>, seat) => {
@@ -29,23 +29,60 @@ function Seatmap({ screeningsId }: { screeningsId: number }) {
     }, {});
 
     Object.values(grouped).forEach((rowSeats) => {
-      rowSeats.sort((a, b) => b.seat_number - a.seat_number);
+      rowSeats.sort((a, b) => a.seat_number - b.seat_number);
     });
 
     return grouped;
   };
 
+  const toggleSeatSelection = (seatId: number) => {
+    setSelectedSeats((prevSelected) =>
+      prevSelected.includes(seatId)
+        ? prevSelected.filter((id) => id !== seatId)
+        : [...prevSelected, seatId]
+    );
+  };
+
+  const handleBooking = async () => {
+    if (selectedSeats.length === 0) {
+      alert("Välj minst en plats för att boka.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/seats/book", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ seatsIds: selectedSeats, userId: 1 }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert("Platser bokade framgångsrikt!");
+        setSelectedSeats([]);
+        setSeats(generateSeatingArrangement(salong));
+      } else {
+        alert(result.error || "Vissa platser är redan bokade.");
+      }
+    } catch (error) {
+      console.error("Kunde inte boka platser:", error);
+      alert("Fel vid bokning. Försök igen.");
+    }
+  };
+  
   const seatsByRow = groupSeatsByRow(seats);
 
   const renderSeatRow = (row: string, seatsInRow: Seat[]) => {
     return (
       <div key={row}>
-        {/* <span className="font-bold">{row}:</span> */}
         <div className="flex gap-4 mt-2 justify-center">
           {seatsInRow.map((seat) => (
             <div
               key={seat.seat_id}
-              className={`p-2 ${seat.status === "booked" ? "bg-red-500" : "bg-green-500"} text-white rounded-md w-10 h-10 flex items-center justify-center`}
+              onClick={() => seat.status === "available" && toggleSeatSelection(seat.seat_id)}
+              className={`p-2 cursor-pointer ${seat.status === "booked" ? "bg-red-500" : selectedSeats.includes(seat.seat_id) ? "bg-blue-500" : "bg-green-500"
+                } text-white rounded-md w-10 h-10 flex items-center justify-center`}
             >
               {row}
               {seat.seat_number}
@@ -56,22 +93,16 @@ function Seatmap({ screeningsId }: { screeningsId: number }) {
     );
   };
 
-  //   const renderSeat = (seat: Seat) => {
-  //     const isBooked = seat.status === "booked";
-  //     return (
-  //       <div
-  //         className={`p-2 m-1 ${isBooked ? "bg-red-500" : "bg-green-500"} text-white rounded-md`}
-  //       >
-  //         {seat.seat_number}-{seat.row_number}
-  //       </div>
-  //     );
-  //   };
-
   return (
     <div>
+      <h2>Välj dina platser</h2>
       {Object.entries(seatsByRow)
         .sort(([rowA], [rowB]) => rowA.localeCompare(rowB))
         .map(([row, seatsInRow]) => renderSeatRow(row, seatsInRow))}
+      <button
+        onClick={handleBooking}
+        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+      >Boka Biljett</button>
     </div>
   );
 }

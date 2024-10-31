@@ -7,6 +7,58 @@ import {
 } from "../db/schema";
 import { and, eq, sql } from "drizzle-orm";
 
+type Seat = {
+  seat_id: number;
+  seat_number: number;
+  row_number: string;
+  status: "available" | "booked";
+};
+
+  const generateSeatingArrangement = (salong: "stor" | "liten") => {
+  const seatingArrangement: Seat[] = [];
+  let seatId = 1;
+
+  const addRow = (row: string, seatCount: number) => {
+    for (let i = 1; i <= seatCount; i++) {
+      seatingArrangement.push({
+        seat_id: seatId++,
+        seat_number: i,
+        row_number: row,
+        status: "available",
+      });
+    }
+  };
+    
+    console.log("Salong", salong);
+
+    if (salong === "stor") {
+    console.log("Generating seats for 'stor' salong");
+    addRow("A", 8);
+    addRow("B", 9);
+    addRow("C", 10); 
+    addRow("D", 10);
+    addRow("E", 10); 
+    addRow("F", 10);
+    addRow("G", 12); 
+    addRow("H", 12);
+  }
+
+    else if (salong === "liten") {
+    addRow("A", 6); 
+    addRow("B", 8); 
+    addRow("C", 9); 
+    addRow("D", 9);
+    addRow("E", 10); 
+    addRow("F", 10); 
+    addRow("G", 12); 
+    } else {
+      console.log("unknown salong type:", salong);
+    }
+
+    console.log("generate seating arrangement:", seatingArrangement);
+  return seatingArrangement;
+};
+
 export const getAllSeats = async () => {
   try {
     const seats = await db.select().from(seatsTable);
@@ -56,5 +108,33 @@ export const seatMap = async (screeningsId: number) => {
     return seatMap;
   } catch (error) {
     throw new Error("Could not get seatmap");
+  }
+};
+
+export const bookSeatsForScreening = async (screeningId: number, seatIds: number[], userId: number) => {
+  try {
+    const bookedSeats = [];
+    const failedSeats = [];
+
+    for (const seatId of seatIds) {
+      const existingBooking = await db.select().from(bookingsTable)
+        .where(and(eq(bookingsTable.seat_id, seatId), eq(bookingsTable.screening_id, screeningId)));
+      
+      if (existingBooking.length === 0) {
+        await db.insert(bookingsTable).values({
+          seat_id: seatId,
+          screening_id: screeningId,
+          user_id: userId,
+          status: "Confirmed",
+        });
+        bookedSeats.push(seatId);
+      } else {
+        failedSeats.push(seatId);
+      }
+    }
+
+    return { success: failedSeats.length === 0, bookedSeats, failedSeats };
+  } catch (error) {
+    throw new Error("Error booking seats");
   }
 };

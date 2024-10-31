@@ -3,7 +3,7 @@ import { Card } from "../ui/card";
 
 const Footer: React.FC = () => {
   return (
-    <Card className="w-full bg-black text-white py-8 mt-8">
+    <Card className="w-full bg-black text-[#F8C496] py-8 mt-8 relative">
       <div className="container mx-auto grid grid-cols-3 gap-8 px-4 justify-items-center">
         
         <div>
@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
       
-      <div className="text-end mt-8 p-10 text-gray-400">
+      <div className="text-end pr-10 text-[#F8C496]-400">
         <p>COPYRIGHT © FRONTEND GRUPP 5 2024</p>
       </div>
     </Card>

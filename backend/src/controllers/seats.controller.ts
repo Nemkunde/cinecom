@@ -20,7 +20,7 @@ export const getAllAuditoriumSeats = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id, 10);
 
     if (isNaN(id)) {
-      res.status(400).json({ error: "Invalid user id" });
+      res.status(400).json({ error: "Invalid screening id" });
     }
 
     const seats = await getAllSeatsByAuditorium(id);

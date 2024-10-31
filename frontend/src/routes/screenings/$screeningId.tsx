@@ -4,7 +4,7 @@ import Seatmap from "src/components/Seatmap/Seatmap";
 export const Route = createFileRoute("/screenings/$screeningId")({
   component: () => {
     const { screeningId } = Route.useParams();
-    return <Seatmap screeningsId={+screeningId} />;
+    return <Seatmap screeningId={+screeningId} />;
   },
 });
 

@@ -62,6 +62,15 @@ const Header: React.FC = () => {
             <DropdownMenuItem onClick={() => navigate({ to: "/search" })}>
               SÖK
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/bookings/bookingconditions" })}>
+              BOKNINGSVILLKOR
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/giftcard" })}>
+              PRESENTKORT
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/about" })}>
+              OM OSS
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 

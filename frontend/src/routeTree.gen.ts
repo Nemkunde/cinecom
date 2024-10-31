@@ -14,11 +14,14 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as HomepageImport } from './routes/homepage'
+import { Route as GiftcardImport } from './routes/giftcard'
+import { Route as AboutImport } from './routes/about'
 import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as ScreeningsIndexImport } from './routes/screenings/index'
 import { Route as MoviesIndexImport } from './routes/movies/index'
 import { Route as ScreeningsScreeningIdImport } from './routes/screenings/$screeningId'
 import { Route as MoviesMovieIdImport } from './routes/movies/$movieId'
+import { Route as BookingsBookingconditionsImport } from './routes/bookings/bookingconditions'
 import { Route as AccountRegisterImport } from './routes/account/register'
 import { Route as AccountProfileImport } from './routes/account/profile'
 import { Route as AccountLoginImport } from './routes/account/login'
@@ -32,6 +35,18 @@ const IndexLazyImport = createFileRoute('/')()
 const HomepageRoute = HomepageImport.update({
   id: '/homepage',
   path: '/homepage',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GiftcardRoute = GiftcardImport.update({
+  id: '/giftcard',
+  path: '/giftcard',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AboutRoute = AboutImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -71,6 +86,12 @@ const MoviesMovieIdRoute = MoviesMovieIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const BookingsBookingconditionsRoute = BookingsBookingconditionsImport.update({
+  id: '/bookings/bookingconditions',
+  path: '/bookings/bookingconditions',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AccountRegisterRoute = AccountRegisterImport.update({
   id: '/account/register',
   path: '/account/register',
@@ -100,6 +121,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/giftcard': {
+      id: '/giftcard'
+      path: '/giftcard'
+      fullPath: '/giftcard'
+      preLoaderRoute: typeof GiftcardImport
+      parentRoute: typeof rootRoute
+    }
     '/homepage': {
       id: '/homepage'
       path: '/homepage'
@@ -126,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/account/register'
       fullPath: '/account/register'
       preLoaderRoute: typeof AccountRegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/bookings/bookingconditions': {
+      id: '/bookings/bookingconditions'
+      path: '/bookings/bookingconditions'
+      fullPath: '/bookings/bookingconditions'
+      preLoaderRoute: typeof BookingsBookingconditionsImport
       parentRoute: typeof rootRoute
     }
     '/movies/$movieId': {
@@ -170,10 +212,13 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/about': typeof AboutRoute
+  '/giftcard': typeof GiftcardRoute
   '/homepage': typeof HomepageRoute
   '/account/login': typeof AccountLoginRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
+  '/bookings/bookingconditions': typeof BookingsBookingconditionsRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies': typeof MoviesIndexRoute
@@ -183,10 +228,13 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/about': typeof AboutRoute
+  '/giftcard': typeof GiftcardRoute
   '/homepage': typeof HomepageRoute
   '/account/login': typeof AccountLoginRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
+  '/bookings/bookingconditions': typeof BookingsBookingconditionsRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies': typeof MoviesIndexRoute
@@ -197,10 +245,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/about': typeof AboutRoute
+  '/giftcard': typeof GiftcardRoute
   '/homepage': typeof HomepageRoute
   '/account/login': typeof AccountLoginRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
+  '/bookings/bookingconditions': typeof BookingsBookingconditionsRoute
   '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies/': typeof MoviesIndexRoute
@@ -212,10 +263,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/giftcard'
     | '/homepage'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
+    | '/bookings/bookingconditions'
     | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies'
@@ -224,10 +278,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/giftcard'
     | '/homepage'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
+    | '/bookings/bookingconditions'
     | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies'
@@ -236,10 +293,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/giftcard'
     | '/homepage'
     | '/account/login'
     | '/account/profile'
     | '/account/register'
+    | '/bookings/bookingconditions'
     | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies/'
@@ -250,10 +310,13 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  AboutRoute: typeof AboutRoute
+  GiftcardRoute: typeof GiftcardRoute
   HomepageRoute: typeof HomepageRoute
   AccountLoginRoute: typeof AccountLoginRoute
   AccountProfileRoute: typeof AccountProfileRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
+  BookingsBookingconditionsRoute: typeof BookingsBookingconditionsRoute
   MoviesMovieIdRoute: typeof MoviesMovieIdRoute
   ScreeningsScreeningIdRoute: typeof ScreeningsScreeningIdRoute
   MoviesIndexRoute: typeof MoviesIndexRoute
@@ -263,10 +326,13 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AboutRoute: AboutRoute,
+  GiftcardRoute: GiftcardRoute,
   HomepageRoute: HomepageRoute,
   AccountLoginRoute: AccountLoginRoute,
   AccountProfileRoute: AccountProfileRoute,
   AccountRegisterRoute: AccountRegisterRoute,
+  BookingsBookingconditionsRoute: BookingsBookingconditionsRoute,
   MoviesMovieIdRoute: MoviesMovieIdRoute,
   ScreeningsScreeningIdRoute: ScreeningsScreeningIdRoute,
   MoviesIndexRoute: MoviesIndexRoute,
@@ -287,10 +353,13 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/about",
+        "/giftcard",
         "/homepage",
         "/account/login",
         "/account/profile",
         "/account/register",
+        "/bookings/bookingconditions",
         "/movies/$movieId",
         "/screenings/$screeningId",
         "/movies/",
@@ -300,6 +369,12 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/about": {
+      "filePath": "about.tsx"
+    },
+    "/giftcard": {
+      "filePath": "giftcard.tsx"
     },
     "/homepage": {
       "filePath": "homepage.tsx"
@@ -312,6 +387,9 @@ export const routeTree = rootRoute
     },
     "/account/register": {
       "filePath": "account/register.tsx"
+    },
+    "/bookings/bookingconditions": {
+      "filePath": "bookings/bookingconditions.tsx"
     },
     "/movies/$movieId": {
       "filePath": "movies/$movieId.tsx"

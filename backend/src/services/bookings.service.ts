@@ -172,13 +172,22 @@ export const bookSeat = async ({
   screeningId,
   userId,
   ticketTypeId,
+  customerName,
+  customerEmail,
 }: {
   seatIds: number[];
   screeningId: number;
-  userId: number;
-  ticketTypeId: number; 
-  
+  userId?: number;
+  ticketTypeId: number;
+  customerName?: string;
+  customerEmail?: string;
 }) => {
+  if (!userId && (!customerName || !customerEmail)) {
+    throw new Error(
+      "Provide either UserID or both customer name and email to make a booking."
+    );
+  }
+
   return await db.transaction(async (tx) => {
     const screening = await tx
       .select({ auditorium_id: screeningsTable.auditorium_id })
@@ -237,11 +246,14 @@ export const bookSeat = async ({
     const ticketPrice = ticketType[0].ticket_type_price;
     const bookingValues = seatIds.map((seatId) => ({
       screening_id: screeningId,
-      user_id: userId,
+      user_id: userId || null,
+      customer_name: customerName || null,
+      customer_email: customerEmail || null,
       seat_id: seatId,
       total_price: 0,
-      ticket_type_id: ticketTypeId, 
+      ticket_type_id: ticketTypeId,
       booking_reference: generateBookingReference(),
+      booking_date: new Date(),
     }));
 
     const bookings = await tx
@@ -255,19 +267,17 @@ export const bookSeat = async ({
 
     let totalPrice = 0;
 
-   
     for (const booking of bookings) {
       const [ticket] = await tx
         .insert(ticketsTable)
         .values({
           booking_id: booking.booking_id,
-          ticket_price: ticketPrice, 
+          ticket_price: ticketPrice,
         })
         .returning();
       totalPrice += ticket.ticket_price;
     }
 
-    
     const updatedBookings = await Promise.all(
       bookings.map((booking) =>
         tx

@@ -6,9 +6,13 @@ interface Props {
   screenings: any[];
   movie: any;
   thumbnail: string;
+  movieId: string;
 }
 
-function Screenings({ movie, screenings, thumbnail }: Props) {
+function Screenings({ movie, screenings, thumbnail, movieId }: Props) {
+  console.log("==== MOVIE", movie);
+  console.log("==== SCREENING", screenings);
+
   return (
     <div className="flex flex-col w-full gap-4">
       <h2 className="text-4xl font-bold uppercase text-[#F0EBD6]">
@@ -17,11 +21,13 @@ function Screenings({ movie, screenings, thumbnail }: Props) {
       {screenings.map((screening) => (
         <ScreeningBox
           auditorium={screening.auditorium}
+          screeningId={screening.screeningId}
           movie={screening.movie}
           startTime={screening.startTime}
           thumbnail={thumbnail}
           genres={movie.genres}
           language={movie.language}
+          movieId={movieId}
         />
       ))}
     </div>

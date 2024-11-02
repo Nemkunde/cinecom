@@ -20,11 +20,12 @@ import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as ScreeningsIndexImport } from './routes/screenings/index'
 import { Route as MoviesIndexImport } from './routes/movies/index'
 import { Route as ScreeningsScreeningIdImport } from './routes/screenings/$screeningId'
-import { Route as MoviesMovieIdImport } from './routes/movies/$movieId'
 import { Route as BookingsBookingconditionsImport } from './routes/bookings/bookingconditions'
 import { Route as AccountRegisterImport } from './routes/account/register'
 import { Route as AccountProfileImport } from './routes/account/profile'
 import { Route as AccountLoginImport } from './routes/account/login'
+import { Route as MoviesMovieIdIndexImport } from './routes/movies/$movieId/index'
+import { Route as MoviesMovieIdBookImport } from './routes/movies/$movieId/$book'
 
 // Create Virtual Routes
 
@@ -80,12 +81,6 @@ const ScreeningsScreeningIdRoute = ScreeningsScreeningIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const MoviesMovieIdRoute = MoviesMovieIdImport.update({
-  id: '/movies/$movieId',
-  path: '/movies/$movieId',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const BookingsBookingconditionsRoute = BookingsBookingconditionsImport.update({
   id: '/bookings/bookingconditions',
   path: '/bookings/bookingconditions',
@@ -107,6 +102,18 @@ const AccountProfileRoute = AccountProfileImport.update({
 const AccountLoginRoute = AccountLoginImport.update({
   id: '/account/login',
   path: '/account/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MoviesMovieIdIndexRoute = MoviesMovieIdIndexImport.update({
+  id: '/movies/$movieId/',
+  path: '/movies/$movieId/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MoviesMovieIdBookRoute = MoviesMovieIdBookImport.update({
+  id: '/movies/$movieId/$book',
+  path: '/movies/$movieId/$book',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -170,13 +177,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingsBookingconditionsImport
       parentRoute: typeof rootRoute
     }
-    '/movies/$movieId': {
-      id: '/movies/$movieId'
-      path: '/movies/$movieId'
-      fullPath: '/movies/$movieId'
-      preLoaderRoute: typeof MoviesMovieIdImport
-      parentRoute: typeof rootRoute
-    }
     '/screenings/$screeningId': {
       id: '/screenings/$screeningId'
       path: '/screenings/$screeningId'
@@ -205,6 +205,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchIndexImport
       parentRoute: typeof rootRoute
     }
+    '/movies/$movieId/$book': {
+      id: '/movies/$movieId/$book'
+      path: '/movies/$movieId/$book'
+      fullPath: '/movies/$movieId/$book'
+      preLoaderRoute: typeof MoviesMovieIdBookImport
+      parentRoute: typeof rootRoute
+    }
+    '/movies/$movieId/': {
+      id: '/movies/$movieId/'
+      path: '/movies/$movieId'
+      fullPath: '/movies/$movieId'
+      preLoaderRoute: typeof MoviesMovieIdIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -219,11 +233,12 @@ export interface FileRoutesByFullPath {
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
   '/bookings/bookingconditions': typeof BookingsBookingconditionsRoute
-  '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies': typeof MoviesIndexRoute
   '/screenings': typeof ScreeningsIndexRoute
   '/search': typeof SearchIndexRoute
+  '/movies/$movieId/$book': typeof MoviesMovieIdBookRoute
+  '/movies/$movieId': typeof MoviesMovieIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -235,11 +250,12 @@ export interface FileRoutesByTo {
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
   '/bookings/bookingconditions': typeof BookingsBookingconditionsRoute
-  '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies': typeof MoviesIndexRoute
   '/screenings': typeof ScreeningsIndexRoute
   '/search': typeof SearchIndexRoute
+  '/movies/$movieId/$book': typeof MoviesMovieIdBookRoute
+  '/movies/$movieId': typeof MoviesMovieIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -252,11 +268,12 @@ export interface FileRoutesById {
   '/account/profile': typeof AccountProfileRoute
   '/account/register': typeof AccountRegisterRoute
   '/bookings/bookingconditions': typeof BookingsBookingconditionsRoute
-  '/movies/$movieId': typeof MoviesMovieIdRoute
   '/screenings/$screeningId': typeof ScreeningsScreeningIdRoute
   '/movies/': typeof MoviesIndexRoute
   '/screenings/': typeof ScreeningsIndexRoute
   '/search/': typeof SearchIndexRoute
+  '/movies/$movieId/$book': typeof MoviesMovieIdBookRoute
+  '/movies/$movieId/': typeof MoviesMovieIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -270,11 +287,12 @@ export interface FileRouteTypes {
     | '/account/profile'
     | '/account/register'
     | '/bookings/bookingconditions'
-    | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies'
     | '/screenings'
     | '/search'
+    | '/movies/$movieId/$book'
+    | '/movies/$movieId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -285,11 +303,12 @@ export interface FileRouteTypes {
     | '/account/profile'
     | '/account/register'
     | '/bookings/bookingconditions'
-    | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies'
     | '/screenings'
     | '/search'
+    | '/movies/$movieId/$book'
+    | '/movies/$movieId'
   id:
     | '__root__'
     | '/'
@@ -300,11 +319,12 @@ export interface FileRouteTypes {
     | '/account/profile'
     | '/account/register'
     | '/bookings/bookingconditions'
-    | '/movies/$movieId'
     | '/screenings/$screeningId'
     | '/movies/'
     | '/screenings/'
     | '/search/'
+    | '/movies/$movieId/$book'
+    | '/movies/$movieId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -317,11 +337,12 @@ export interface RootRouteChildren {
   AccountProfileRoute: typeof AccountProfileRoute
   AccountRegisterRoute: typeof AccountRegisterRoute
   BookingsBookingconditionsRoute: typeof BookingsBookingconditionsRoute
-  MoviesMovieIdRoute: typeof MoviesMovieIdRoute
   ScreeningsScreeningIdRoute: typeof ScreeningsScreeningIdRoute
   MoviesIndexRoute: typeof MoviesIndexRoute
   ScreeningsIndexRoute: typeof ScreeningsIndexRoute
   SearchIndexRoute: typeof SearchIndexRoute
+  MoviesMovieIdBookRoute: typeof MoviesMovieIdBookRoute
+  MoviesMovieIdIndexRoute: typeof MoviesMovieIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -333,11 +354,12 @@ const rootRouteChildren: RootRouteChildren = {
   AccountProfileRoute: AccountProfileRoute,
   AccountRegisterRoute: AccountRegisterRoute,
   BookingsBookingconditionsRoute: BookingsBookingconditionsRoute,
-  MoviesMovieIdRoute: MoviesMovieIdRoute,
   ScreeningsScreeningIdRoute: ScreeningsScreeningIdRoute,
   MoviesIndexRoute: MoviesIndexRoute,
   ScreeningsIndexRoute: ScreeningsIndexRoute,
   SearchIndexRoute: SearchIndexRoute,
+  MoviesMovieIdBookRoute: MoviesMovieIdBookRoute,
+  MoviesMovieIdIndexRoute: MoviesMovieIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -360,11 +382,12 @@ export const routeTree = rootRoute
         "/account/profile",
         "/account/register",
         "/bookings/bookingconditions",
-        "/movies/$movieId",
         "/screenings/$screeningId",
         "/movies/",
         "/screenings/",
-        "/search/"
+        "/search/",
+        "/movies/$movieId/$book",
+        "/movies/$movieId/"
       ]
     },
     "/": {
@@ -391,9 +414,6 @@ export const routeTree = rootRoute
     "/bookings/bookingconditions": {
       "filePath": "bookings/bookingconditions.tsx"
     },
-    "/movies/$movieId": {
-      "filePath": "movies/$movieId.tsx"
-    },
     "/screenings/$screeningId": {
       "filePath": "screenings/$screeningId.tsx"
     },
@@ -405,6 +425,12 @@ export const routeTree = rootRoute
     },
     "/search/": {
       "filePath": "search/index.tsx"
+    },
+    "/movies/$movieId/$book": {
+      "filePath": "movies/$movieId/$book.tsx"
+    },
+    "/movies/$movieId/": {
+      "filePath": "movies/$movieId/index.tsx"
     }
   }
 }

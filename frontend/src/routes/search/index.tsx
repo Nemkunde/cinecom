@@ -120,7 +120,7 @@ export const Route = createFileRoute("/search/")({
     }
 
     return (
-      <div className="w-full h-screen">
+      <div className="w-full min-h-screen">
         <div className="h-full">
           <div className="px-32 mt-24 flex flex-col gap-4">
             <span className="text-4xl text-white">Filmer</span>

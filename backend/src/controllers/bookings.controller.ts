@@ -57,8 +57,22 @@ export const getAllBookedSeats = async (req: Request, res: Response) => {
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
-    const { seatIds, screeningId, userId, ticketTypeId, } = req.body;
-    const booking = await bookSeat({ seatIds, screeningId, userId, ticketTypeId, });
+    const {
+      seatIds,
+      screeningId,
+      userId,
+      ticketTypeId,
+      customerEmail,
+      customerName,
+    } = req.body;
+    const booking = await bookSeat({
+      seatIds,
+      screeningId,
+      userId,
+      ticketTypeId,
+      customerEmail,
+      customerName,
+    });
     res.json({ success: true, booking });
   } catch (error: any) {
     console.error(error);

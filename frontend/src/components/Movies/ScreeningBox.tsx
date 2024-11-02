@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
@@ -9,6 +10,8 @@ interface Props {
   thumbnail: string;
   genres: any[];
   language: string;
+  movieId: string;
+  screeningId: number;
 }
 
 function ScreeningBox({
@@ -18,7 +21,11 @@ function ScreeningBox({
   thumbnail,
   genres,
   language,
+  movieId,
+  screeningId,
 }: Props) {
+  console.log("SRTART TRIME", screeningId);
+
   return (
     <div className="flex-col">
       <div className="text-2xl text-[#F8C496] mb-4">
@@ -41,7 +48,15 @@ function ScreeningBox({
             <span>{format(new Date(startTime), "HH:mm")}</span>
           </div>
         </div>
-        <Button variant={"destructive"}>Boka Biljett</Button>
+        <Link
+          to={"/movies/$movieId/$book"}
+          params={{ movieId, book: "book" }}
+          search={{
+            screening: screeningId,
+          }}
+        >
+          <Button variant={"destructive"}>Boka Biljett</Button>
+        </Link>
       </div>
     </div>
   );

@@ -28,7 +28,9 @@ export const getScreeningsByMovieId = async (movieId: number) => {
       .select({
         movie: moviesTable.title,
         auditorium: auditoriumsTable.name,
+        auditoriumId: auditoriumsTable.auditorium_id,
         startTime: screeningsTable.start_time,
+        screeningId: screeningsTable.screening_id,
       })
       .from(screeningsTable)
       .leftJoin(moviesTable, eq(screeningsTable.movie_id, moviesTable.movie_id))

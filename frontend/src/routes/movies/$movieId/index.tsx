@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import MovieInformationBox from "src/components/Movies/MovieInformationBox";
 import Screenings from "src/components/Movies/Screenings";
@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "src/components/ui/dialog";
 
-export const Route = createFileRoute("/movies/$movieId")({
+export const Route = createFileRoute("/movies/$movieId/")({
   component: () => {
     const { movieId } = Route.useParams();
 
@@ -47,9 +47,9 @@ export const Route = createFileRoute("/movies/$movieId")({
       );
 
     return (
-      <>
+      <div className="flex flex-col items-center justify-center">
         <div
-          className="flex items-center justify-center w-full h-screen bg-no-repeat bg-center bg-cover relative"
+          className="flex items-center justify-center w-[70vw] h-[70vh] bg-no-repeat bg-center bg-cover relative"
           style={{
             backgroundImage: `url(${movie.poster_url})`,
           }}
@@ -131,9 +131,10 @@ export const Route = createFileRoute("/movies/$movieId")({
             movie={movie}
             screenings={screenings}
             thumbnail={movie.poster_url}
+            movieId={movieId}
           />
         </div>
-      </>
+      </div>
     );
   },
 });

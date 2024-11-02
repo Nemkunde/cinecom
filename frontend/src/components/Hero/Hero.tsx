@@ -7,6 +7,7 @@ import {
 
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from "src/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
 function Hero() {
   const [movies, setMovies] = useState([]);
@@ -26,7 +27,7 @@ function Hero() {
 
   return (
     <Carousel
-      className="w-full h-[1000px]"
+      className="max-w-[1200px] h-full w-full"
       plugins={[
         Autoplay({
           delay: 10000,
@@ -38,7 +39,7 @@ function Hero() {
         {movies.map((movie, index) => (
           <CarouselItem key={index}>
             <div
-              className="flex items-center justify-center w-full h-[80vh] bg-no-repeat bg-center bg-cover relative"
+              className="flex items-center h-full justify-center bg-no-repeat bg-center bg-cover relative"
               style={{
                 backgroundImage: `url(${movie.poster_url})`,
               }}
@@ -53,9 +54,25 @@ function Hero() {
                     <p className="text-[18px] sm:text-[24px] text-white max-w-[640px]">
                       {movie.description}
                     </p>
-                    <Button variant="outline" size="lg" className="mt-4">
-                      Boka biljetter NU!
-                    </Button>
+                    <div className="flex gap-4">
+                      <Button variant="outline" size="lg" className="my-4">
+                        Boka biljetter NU!
+                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="lg" className="my-4">
+                            Se trailer
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="min-w-[50%] min-h-[50%]">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src={movie.trailer_url}
+                          />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </div>
                 </div>
               </div>

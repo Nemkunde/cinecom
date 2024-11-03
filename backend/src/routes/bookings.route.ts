@@ -1,9 +1,9 @@
 import { Router } from "express";
 import {
   allAvailableSeats,
-  createBooking,
   deleteBookingById,
   getAllBookedSeats,
+  createBooking,
 } from "../controllers/bookings.controller";
 
 const router = Router();

@@ -44,6 +44,8 @@ export const getSeatMap = async (req: Request, res: Response) => {
 
     const mapOfSeats = await seatMap(id);
 
+    console.log("=====MAP OF SEATS====", mapOfSeats);
+
     if (!mapOfSeats) {
       res.status(404).json({ error: "Booking history not found." });
     }

@@ -4,13 +4,11 @@ import Seatmap from "src/components/Seatmap/Seatmap";
 import { TicketSelectionCard } from "src/components/ui/TicketSelectionCard";
 import { TicketSummaryCard } from "src/components/ui/TicketSummaryCard";
 
-
 const tickets = [
   { type: "Vuxen", quantity: 1, price: 140 },
   { type: "Barn", quantity: 0, price: 80 },
   { type: "Pensionär", quantity: 0, price: 120 },
 ];
-
 
 const TicketSelector = () => {
   const { screeningId } = Route.useParams();
@@ -21,26 +19,20 @@ const TicketSelector = () => {
         <TicketSelectionCard />
         <Seatmap screeningsId={+screeningId} />
         <TicketSummaryCard tickets={tickets} />
-        <BookTicketButton seatIds={[1, 2]} screeningId={1} userId={41}/>
+        <BookTicketButton seatIds={[1, 2]} screeningId={1} userId={41} />
       </div>
     </div>
   );
 };
 
-
 export const Route = createFileRoute("/screenings/$screeningId")({
   component: TicketSelector,
 });
-
-
-
 
 // import { createFileRoute } from "@tanstack/react-router";
 // import Seatmap from "src/components/Seatmap/Seatmap";
 // import { TicketSelectionCard } from "src/components/ui/TicketSelectionCard";
 // import {TicketSummaryCard} from "src/components/ui/TicketSummaryCard";
-
-
 
 // const tickets = [
 //   { type: "Vuxen", quantity: 2, price: 120 },
@@ -56,7 +48,7 @@ export const Route = createFileRoute("/screenings/$screeningId")({
 //   );
 // };
 
-// 
+//
 // export const Routetickets = createFileRoute("/screenings/$screeningId")({
 //   component: TicketSummary,
 // });
@@ -67,7 +59,7 @@ export const Route = createFileRoute("/screenings/$screeningId")({
 //   return (
 //     <div className="flex items-center justify-center min-h-screen bg-gray-100">
 //       <div className="space-y-8 text-center">
-//         <TicketSelectionCard /> 
+//         <TicketSelectionCard />
 //         <Seatmap screeningsId={+screeningId} />
 //       </div>
 //     </div>
@@ -78,17 +70,12 @@ export const Route = createFileRoute("/screenings/$screeningId")({
 //   component: TicketSelector,
 // });
 
-
-
-
-
 /*export const Route = createFileRoute("/screenings/$screeningId")({
   component: () => {
     const { screeningId } = Route.useParams();
     return <Seatmap screeningsId={+screeningId} />;
   },
 });*/
-
 
 // function ScreeningComponent() {
 //   const { screeningId } = Route.useParams();

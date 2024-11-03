@@ -1,15 +1,8 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import MovieInformationBox from "src/components/Movies/MovieInformationBox";
 import Screenings from "src/components/Movies/Screenings";
-import { Button } from "src/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from "src/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "src/components/ui/dialog";
 
 export const Route = createFileRoute("/movies/$movieId/")({
   component: () => {

@@ -33,8 +33,6 @@ export const getAllSeatsByAuditorium = async (auditoriumId: number) => {
 
 export const seatMap = async (screeningsId: number) => {
   try {
-    console.log("====HELL=???", screeningsId);
-
     const screening = await db
       .select({
         screening_id: screeningsTable.screening_id,
@@ -48,7 +46,6 @@ export const seatMap = async (screeningsId: number) => {
       .where(eq(screeningsTable.screening_id, screeningsId))
       .limit(1);
 
-    console.log("===SCREEINHS", screening);
     if (!screening.length) {
       throw new Error("Screening not found");
     }
@@ -87,8 +84,6 @@ export const seatMap = async (screeningsId: number) => {
         eq(ticketTypesTable.ticket_type_id, bookingTicketsTable.ticket_type_id)
       );
 
-    console.log("===== SEATMAP?????", seatMap);
-
     const seatsByRow = seatMap.reduce<Record<string, typeof seatMap>>(
       (acc, seat) => {
         if (!acc[seat.row_number]) {
@@ -115,8 +110,6 @@ export const seatMap = async (screeningsId: number) => {
       { total: 0, booked: 0, available: 0 }
     );
 
-    console.log("=====SEATMAP=======", seatMap);
-
     return {
       screening_id: screeningsId,
       auditorium_id: screening[0].auditorium_id,
@@ -126,41 +119,4 @@ export const seatMap = async (screeningsId: number) => {
   } catch (error) {
     throw new Error("Could not get seatmap");
   }
-  //   const seatMap = await db
-  //     .select({
-  //       seat_id: seatsTable.seat_id,
-  //       auditorium_id: seatsTable.auditorium_id,
-  //       seat_number: seatsTable.seat_number,
-  //       row_number: seatsTable.row_number,
-  //       status: sql`CASE WHEN ${bookingTicketsTable.seat_id} IS NULL THEN 'available' ELSE 'booked' END`,
-  //     })
-  //     .from(seatsTable)
-  //     .innerJoin(
-  //       screeningsTable,
-  //       eq(seatsTable.auditorium_id, screeningsTable.auditorium_id)
-  //     )
-  //     .leftJoin(
-  //       bookingsTable,
-  //       eq(bookingsTable.screening_id, screeningsTable.screening_id)
-  //     )
-  //     .leftJoin(
-  //       bookingTicketsTable,
-  //       and(
-  //         eq(bookingTicketsTable.booking_id, bookingsTable.booking_id),
-  //         eq(bookingTicketsTable.seat_id, seatsTable.seat_id)
-  //       )
-  //     )
-  //     .where(eq(screeningsTable.screening_id, screeningsId))
-  //     .groupBy(
-  //       seatsTable.seat_id,
-  //       seatsTable.auditorium_id,
-  //       seatsTable.seat_number,
-  //       seatsTable.row_number,
-  //       bookingTicketsTable.seat_id
-  //     );
-
-  //   return seatMap;
-  // } catch (error) {
-  //   throw new Error("Could not get seatmap");
-  // }
 };

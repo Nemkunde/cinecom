@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   const updateLoginStatus = () => {
     setIsLoggedIn(!!localStorage.getItem("token"));
   };
-  
+
   useEffect(() => {
     window.addEventListener("storage", updateLoginStatus);
     return () => window.removeEventListener("storage", updateLoginStatus);
@@ -31,12 +31,14 @@ const Header: React.FC = () => {
   }, [isLoggedIn, location.pathname, navigate]);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm("Är du säker på att du vill logga ut?");
+    const confirmLogout = window.confirm(
+      "Är du säker på att du vill logga ut?"
+    );
     if (confirmLogout) {
       localStorage.removeItem("token");
-      setIsLoggedIn(false); 
+      setIsLoggedIn(false);
       window.location.reload();
-      navigate({ to: "/account/login" }); 
+      navigate({ to: "/account/login" });
     }
   };
 
@@ -50,19 +52,21 @@ const Header: React.FC = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate({ to: "/homepage" })}>
+            <DropdownMenuItem onClick={() => navigate({ to: "/" })}>
               HEM
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/screenings/1" })}>
+            {/* <DropdownMenuItem onClick={() => navigate({ to: "/screenings/1" })}>
               VISNINGAR
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate({ to: "/movies/2" })}>
               FILMER
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuItem onClick={() => navigate({ to: "/search" })}>
               SÖK
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/bookings/bookingconditions" })}>
+            <DropdownMenuItem
+              onClick={() => navigate({ to: "/bookings/bookingconditions" })}
+            >
               BOKNINGSVILLKOR
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate({ to: "/giftcard" })}>
@@ -74,7 +78,12 @@ const Header: React.FC = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <img src="../img/Logo.png" alt="Cinecom Logo" className="h-12 cursor-pointer" onClick={() => navigate({ to: "/homepage"})} />
+        <img
+          src="../img/Logo.png"
+          alt="Cinecom Logo"
+          className="h-12 cursor-pointer"
+          onClick={() => navigate({ to: "/homepage" })}
+        />
 
         <div className="flex space-x-6 items-center">
           <DropdownMenu>
@@ -84,15 +93,21 @@ const Header: React.FC = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => navigate({ to: "/account/profile" })}>
+              <DropdownMenuItem
+                onClick={() => navigate({ to: "/account/profile" })}
+              >
                 PROFIL
               </DropdownMenuItem>
               {!isLoggedIn ? (
                 <>
-                  <DropdownMenuItem onClick={() => navigate({ to: "/account/register" })}>
+                  <DropdownMenuItem
+                    onClick={() => navigate({ to: "/account/register" })}
+                  >
                     REGISTRERA ANVÄNDARE
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate({ to: "/account/login" })}>
+                  <DropdownMenuItem
+                    onClick={() => navigate({ to: "/account/login" })}
+                  >
                     LOGGA IN
                   </DropdownMenuItem>
                 </>

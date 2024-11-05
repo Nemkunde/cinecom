@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import LogoutButton from "../Buttonlogic/LogoutButton";
-import RemoveBookingButton from "../Buttonlogic/DeleteBooking";
+import BookingsList from "../bookings/BookingsList";
 
 const Profile = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -69,14 +69,15 @@ const Profile = () => {
         )}
         {activeTab === "bookings" && (
           <div className="text-white p-2">
-            <p>Bokningar.</p>
-            <RemoveBookingButton bookingId={0} />
+                        <BookingsList />
+
+            
             <LogoutButton />
           </div>
         )}
         {activeTab === "bookingHistory" && (
           <div className="text-white p-2">
-            <p>Bokningshistorik.</p>
+            <p>Bokningshistorik</p>
             <LogoutButton />
           </div>
         )}

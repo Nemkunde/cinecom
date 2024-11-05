@@ -9,6 +9,24 @@ import {
 } from "../db/schema";
 import { and, eq, inArray } from "drizzle-orm";
 
+export const getAllBookings = async () => {
+  try {
+    return await db
+      .select({
+        booking_id: bookingsTable.booking_id,
+        customer_name: bookingsTable.customer_name,
+        customer_email: bookingsTable.customer_email,
+        screening_id: bookingsTable.screening_id,
+        booking_date: bookingsTable.booking_date,
+        status: bookingsTable.status,
+        total_price: bookingsTable.total_price,
+      })
+      .from(bookingsTable);
+  } catch (error) {
+    throw new Error("Failed to retrieve bookings");
+  }
+};
+
 export const getAvailableSeats = async (screeningId: number) => {
   try {
     const screening = await db

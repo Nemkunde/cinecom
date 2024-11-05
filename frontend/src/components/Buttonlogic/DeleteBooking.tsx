@@ -3,9 +3,10 @@ import { Button } from "../ui/button";
 
 interface RemoveBookingButtonProps {
   bookingId: number;
+  onDelete?: () => void;
 }
 
-const RemoveBookingButton: React.FC<RemoveBookingButtonProps> = ({ bookingId }) => {
+const RemoveBookingButton: React.FC<RemoveBookingButtonProps> = ({ bookingId, onDelete }) => {
   const handleRemoveBooking = async () => {
     const confirmDelete = window.confirm("Are you sure you want to remove this booking?");
     if (!confirmDelete) return;
@@ -23,6 +24,8 @@ const RemoveBookingButton: React.FC<RemoveBookingButtonProps> = ({ bookingId }) 
 
       alert("Booking removed successfully!");
       console.log("Booking removed:", bookingId);
+
+      if (onDelete) onDelete();
     } catch (error) {
       alert("An error occurred while removing the booking.");
       console.error("Remove booking error:", error);

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   bookSeat,
   deleteBooking,
+  getAllBookings,
   getAvailableSeats,
   getBookedSeats,
 } from "../services/bookings.service";
@@ -23,6 +24,15 @@ export const allAvailableSeats = async (req: Request, res: Response) => {
     res.json(availableSeats);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch" });
+  }
+};
+
+export const getBookings = async (req: Request, res: Response) => {
+  try {
+    const bookings = await getAllBookings();
+    res.json({ success: true, bookings });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error });
   }
 };
 

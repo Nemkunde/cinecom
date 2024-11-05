@@ -16,7 +16,7 @@ export const allAvailableSeats = async (req: Request, res: Response) => {
 
     const availableSeats = await getAvailableSeats(id);
 
-    if (!availableSeats) {
+    if (!availableSeats || availableSeats.length === 0) {
       res.status(400).json({ message: "No available seats" });
     }
 
@@ -35,7 +35,7 @@ export const getAllBookedSeats = async (req: Request, res: Response) => {
     }
 
     const bookedSeats = await getBookedSeats(id);
-    if (!bookedSeats) {
+    if (!bookedSeats || bookedSeats.length === 0) {
       res.status(400).json({ message: "No booked seats" });
     }
     res.json(bookedSeats);
@@ -61,18 +61,24 @@ export const createBooking = async (req: Request, res: Response) => {
       seatIds,
       screeningId,
       userId,
-      ticketTypeId,
+      tickets,
       customerEmail,
       customerName,
     } = req.body;
+
+    // if (!Array.isArray(tickets) || tickets.length === 0) {
+    //   return res.status(400).json({ error: "Tickets array required " });
+    // }
+
     const booking = await bookSeat({
       seatIds,
       screeningId,
       userId,
-      ticketTypeId,
+      tickets,
       customerEmail,
       customerName,
     });
+
     res.json({ success: true, booking });
   } catch (error: any) {
     console.error(error);

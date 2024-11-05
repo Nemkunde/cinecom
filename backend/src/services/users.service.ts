@@ -2,6 +2,7 @@ import { db } from "../db/drizzle";
 import {
   auditoriumsTable,
   bookingsTable,
+  bookingTicketsTable,
   moviesTable,
   screeningsTable,
   seatsTable,
@@ -147,7 +148,10 @@ export const getUserBookingHistory = async (id: number) => {
       })
       .from(bookingsTable)
       .innerJoin(usersTable, eq(usersTable.user_id, bookingsTable.user_id))
-      .innerJoin(seatsTable, eq(seatsTable.seat_id, bookingsTable.seat_id))
+      .innerJoin(
+        seatsTable,
+        eq(seatsTable.seat_id, bookingTicketsTable.seat_id)
+      )
       .innerJoin(
         auditoriumsTable,
         eq(auditoriumsTable.auditorium_id, seatsTable.auditorium_id)

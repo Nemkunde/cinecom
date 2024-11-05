@@ -16,7 +16,6 @@ function Hero() {
     fetch("/api/movies")
       .then((response) => response.json())
       .then((data) => {
-        console.log("DATA", data);
         setMovies(data);
       });
   }, []);

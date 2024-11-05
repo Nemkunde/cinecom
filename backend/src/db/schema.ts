@@ -72,18 +72,32 @@ export const bookingsTable = pgTable("bookings", {
     .notNull()
     .references(() => screeningsTable.screening_id),
   user_id: integer("user_id").references(() => usersTable.user_id),
-  seat_id: integer("seat_id")
-    .notNull()
-    .references(() => seatsTable.seat_id),
-  ticket_type_id: integer("ticket_type_id")
-    .notNull()
-    .references(() => ticketTypesTable.ticket_type_id),
+  // seat_id: integer("seat_id")
+  //   .notNull()
+  //   .references(() => seatsTable.seat_id),
+  // ticket_type_id: integer("ticket_type_id")
+  //   .notNull()
+  //   .references(() => ticketTypesTable.ticket_type_id),
   customer_name: varchar(),
   customer_email: varchar(),
   total_price: integer("total_price").notNull(),
   booking_reference: varchar("booking_reference", { length: 255 }).notNull(),
   status: varchar("status").notNull().default("Active"),
   booking_date: timestamp("booking_date").notNull().defaultNow(),
+});
+
+export const bookingTicketsTable = pgTable("bookingtickets", {
+  booking_ticket_id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  booking_id: integer("booking_id")
+    .notNull()
+    .references(() => bookingsTable.booking_id),
+  seat_id: integer("seat_id")
+    .notNull()
+    .references(() => seatsTable.seat_id),
+  ticket_type_id: integer("ticket_type_id")
+    .notNull()
+    .references(() => ticketTypesTable.ticket_type_id),
+  quantity: integer().notNull().default(1),
 });
 
 export const moviesTable = pgTable("movies", {

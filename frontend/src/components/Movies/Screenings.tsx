@@ -10,9 +10,6 @@ interface Props {
 }
 
 function Screenings({ movie, screenings, thumbnail, movieId }: Props) {
-  console.log("==== MOVIE", movie);
-  console.log("==== SCREENING", screenings);
-
   return (
     <div className="flex flex-col w-full gap-4">
       <h2 className="text-4xl font-bold uppercase text-[#F0EBD6]">

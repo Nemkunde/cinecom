@@ -47,7 +47,7 @@ const Header: React.FC = () => {
       <CardHeader className="flex-row justify-between items-center px-4 py-6">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="ghost" className="text-white">
+            <Button variant="ghost" className="text-[#F8C496]">
               MENY
             </Button>
           </DropdownMenuTrigger>
@@ -88,7 +88,7 @@ const Header: React.FC = () => {
         <div className="flex space-x-6 items-center">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button variant="ghost" className="text-white">
+              <Button variant="ghost" className="text-[#F8C496]">
                 MEDLEM
               </Button>
             </DropdownMenuTrigger>

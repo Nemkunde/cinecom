@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useAuth } from "src/components/Context/AuthContext";
 import Seatmap from "src/components/Seatmap/Seatmap";
 import { Button } from "src/components/ui/button";
 import { TicketSelectionCard } from "src/components/ui/TicketSelectionCard";
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
   },
   component: () => {
     const { screening } = useSearch({ from: "/movies/$movieId/$book" });
+    const { user } = useAuth();
 
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [formValues, setFormValues] = useState<FormValues>({
@@ -41,9 +43,9 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
         },
       ],
       screeningId: screening,
-      userId: undefined,
-      customerName: "Lars",
-      customerEmail: "lasse@aaa.com",
+      userId: user?.userId ?? undefined,
+      customerName: "Lasse",
+      customerEmail: "lasse@hej.com",
     });
 
     useEffect(() => {
@@ -84,6 +86,7 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
     return (
       <div>
         <TicketSelectionCard />
+        <h1 className="text-4xl text-white">hallå</h1>
         <Seatmap
           screeningsId={screening}
           selectedSeats={selectedSeats}

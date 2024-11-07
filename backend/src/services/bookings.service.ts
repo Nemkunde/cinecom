@@ -20,6 +20,7 @@ export const getAllBookings = async () => {
         booking_date: bookingsTable.booking_date,
         status: bookingsTable.status,
         total_price: bookingsTable.total_price,
+        booking_reference: bookingsTable.booking_reference,
       })
       .from(bookingsTable);
   } catch (error) {

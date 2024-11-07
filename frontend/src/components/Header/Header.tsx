@@ -82,7 +82,7 @@ const Header: React.FC = () => {
           src="../img/Logo.png"
           alt="Cinecom Logo"
           className="h-12 cursor-pointer"
-          onClick={() => navigate({ to: "/homepage" })}
+          onClick={() => navigate({ to: "/" })}
         />
 
         <div className="flex space-x-6 items-center">

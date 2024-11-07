@@ -44,8 +44,8 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
       ],
       screeningId: screening,
       userId: user?.userId ?? undefined,
-      customerName: "Lasse",
-      customerEmail: "lasse@hej.com",
+      customerName: user?.firstname ?? "Guest",
+      customerEmail: user?.email ?? "guest@example.com",
     });
 
     useEffect(() => {

@@ -44,7 +44,7 @@ const LoginForm = () => {
       
       window.dispatchEvent(new Event("storage")); 
 
-      navigate({ to: "/homepage" }); 
+      navigate({ to: "/" }); 
     } catch (error) {
       setError("Failed to log in");
       console.error("Login error:", error);

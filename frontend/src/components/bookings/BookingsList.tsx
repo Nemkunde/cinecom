@@ -42,8 +42,6 @@ const BookingsList = () => {
         <ul>
           {userBookings.map((booking) => (
             <li key={booking.booking_id} className="border p-4 mb-4">
-              <p>Kund: {booking.customer_name}</p>
-              <p>Mail: {booking.customer_email}</p>
               <p>Visning: {booking.screening_id}</p>
               <p>Date: {new Date(booking.booking_date).toLocaleDateString()}</p>
               <p>Totalpris: {booking.total_price}</p>

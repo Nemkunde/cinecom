@@ -3,7 +3,7 @@ import { Card } from "../ui/card";
 
 const Footer: React.FC = () => {
   return (
-    <Card className="w-full bg-black text-[#F8C496] py-8">
+    <Card className="w-full bg-black text-[#F8C496] py-8 mt-6">
       <div className="container mx-auto grid grid-cols-3 gap-8 px-4 justify-items-center">
         <div>
           <h3 className="text-lg font-semibold mb-2">KONTAKT</h3>

@@ -112,7 +112,13 @@ export const signInUser = async (email: string, password: string) => {
     }
 
     // Generate JWT token with user details
-    const token = generateToken(user.user_id, user.role);
+    const token = generateToken(
+      user.user_id,
+      user.role,
+      user.email,
+      user.firstname,
+      user.lastname
+    );
 
     // Optionally, include other user fields if you need them
     return {

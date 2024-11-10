@@ -8,6 +8,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from "src/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Link } from "@tanstack/react-router";
 
 function Hero() {
   const [movies, setMovies] = useState([]);
@@ -54,9 +55,11 @@ function Hero() {
                       {movie.description}
                     </p>
                     <div className="flex gap-4">
-                      <Button variant="outline" size="lg" className="my-4">
-                        Boka biljetter NU!
-                      </Button>
+                      <Link to={`/movies/${movie.movieId}`}>
+                        <Button variant="outline" size="lg" className="my-4">
+                          Läs mer
+                        </Button>
+                      </Link>
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button variant="outline" size="lg" className="my-4">

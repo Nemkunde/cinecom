@@ -8,7 +8,7 @@ import Header from "src/components/Header/Header";
 
 export const Route = createRootRoute({
   component: () => (
-    <div className="flex flex-col w-full h-screen bg-[#080F1F]">
+    <div className="flex flex-col w-full min-h-screen h-full bg-[#080F1F]">
       <Header />
       <div className="flex-grow">
         <Outlet />

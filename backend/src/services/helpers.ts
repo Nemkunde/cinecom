@@ -99,6 +99,7 @@ export function moodifyMovieStructure(movies: ExtendedMovies[]) {
       if (!moviesMap.has(movieId)) {
         moviesMap.set(movieId, {
           title,
+          movieId,
           description,
           duration,
           age_limit,

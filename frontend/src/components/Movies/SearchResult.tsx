@@ -31,7 +31,9 @@ function SearchResult({ movie, screening }: Props) {
             <span>{format(new Date(screening.startTime), "HH:mm")}</span>
           </div>
         </div>
-        <Button variant={"destructive"}>Boka Biljett</Button>
+        <Link to={`/movies/${movie.movieId}/book`}>
+          <Button variant={"destructive"}>Boka Biljett</Button>
+        </Link>
         <Link to={`/movies/${movie.movieId}`}>
           <Button variant={"destructive"}>Läs mer</Button>
         </Link>

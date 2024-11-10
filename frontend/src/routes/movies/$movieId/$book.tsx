@@ -3,9 +3,8 @@ import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "src/components/Context/AuthContext";
 import Seatmap from "src/components/Seatmap/Seatmap";
+import TicketSelection from "src/components/TicketSelection/TicketSelection";
 import { Button } from "src/components/ui/button";
-import { TicketSelectionCard } from "src/components/ui/TicketSelectionCard";
-import { TicketSummaryCard } from "src/components/ui/TicketSummaryCard";
 
 type Booking = {
   screening: number;
@@ -37,10 +36,9 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
     const [formValues, setFormValues] = useState<FormValues>({
       seatIds: selectedSeats,
       tickets: [
-        {
-          ticketTypeId: 1,
-          quantity: 2,
-        },
+        { ticketTypeId: 1, quantity: 0 },
+        { ticketTypeId: 2, quantity: 0 },
+        { ticketTypeId: 3, quantity: 0 },
       ],
       screeningId: screening,
       userId: user?.userId ?? undefined,
@@ -71,7 +69,8 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
 
         return await response.json();
       },
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
+        window.location.reload();
         console.log("Booking created", data);
       },
       onError: (error) => {
@@ -83,20 +82,35 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
       await mutation.mutateAsync();
     };
 
+    const handleTicketsChange = (
+      tickets: { ticketTypeId: number; quantity: number }[]
+    ) => {
+      setFormValues((prev) => ({
+        ...prev,
+        tickets,
+      }));
+    };
+
+    const totalTickets = formValues.tickets.reduce(
+      (sum, ticket) => sum + ticket.quantity,
+      0
+    );
+
     return (
-      <div>
-        <TicketSelectionCard />
-        <h1 className="text-4xl text-white">hallå</h1>
+      <div className="flex flex-col gap-4 items-center justify-center">
+        <TicketSelection
+          tickets={formValues.tickets}
+          setTickets={handleTicketsChange}
+        />
         <Seatmap
           screeningsId={screening}
           selectedSeats={selectedSeats}
           setSelectedSeats={setSelectedSeats}
+          maxSeats={totalTickets}
         />
         <Button variant="destructive" onClick={handleSubmit}>
           Boka
         </Button>
-        {/* <TicketSummaryCard tickets={formValues.ticket} /> */}
-        {/* <BookTicketButton seatIds={[1, 2]} screeningId={1} userId={41} /> */}
       </div>
     );
   },

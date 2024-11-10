@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter, useSearch } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Input } from "src/components/ui/input";
 import { Button } from "src/components/ui/button";
 import { Calendar } from "src/components/ui/calendar";
@@ -23,7 +23,6 @@ import {
 } from "src/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import SearchResult from "src/components/Movies/SearchResult";
-import React from "react";
 
 export const Route = createFileRoute("/search/")({
   component: () => {
@@ -160,7 +159,7 @@ export const Route = createFileRoute("/search/")({
                     />
                   </PopoverContent>
                 </Popover>
-                <Select onValueChange={setGenre}>
+                <Select value={genre} onValueChange={setGenre}>
                   <SelectTrigger className="w-[180px] bg-white">
                     <SelectValue placeholder="Genre" />
                   </SelectTrigger>
@@ -170,7 +169,7 @@ export const Route = createFileRoute("/search/")({
                     ))}
                   </SelectContent>
                 </Select>
-                <Select onValueChange={setAge}>
+                <Select value={age} onValueChange={setAge}>
                   <SelectTrigger className="w-[180px] bg-white">
                     <SelectValue placeholder="Ålder" />
                   </SelectTrigger>
@@ -180,7 +179,7 @@ export const Route = createFileRoute("/search/")({
                     <SelectItem value="15">15</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select onValueChange={setLanguage}>
+                <Select value={language} onValueChange={setLanguage}>
                   <SelectTrigger className="w-[180px] bg-white">
                     <SelectValue placeholder="Språk" />
                   </SelectTrigger>

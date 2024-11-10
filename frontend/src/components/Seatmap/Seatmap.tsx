@@ -11,10 +11,12 @@ function Seatmap({
   screeningsId,
   setSelectedSeats,
   selectedSeats,
+  maxSeats,
 }: {
   screeningsId: number;
   setSelectedSeats: React.Dispatch<React.SetStateAction<never[]>>;
   selectedSeats: any[];
+  maxSeats: number;
 }) {
   const [seats, setSeats] = useState<any[]>([]);
 
@@ -32,9 +34,10 @@ function Seatmap({
       setSelectedSeats((prev: any) => {
         if (prev.includes(seat.seat_id)) {
           return prev.filter((s: any) => s !== seat.seat_id);
-        } else {
+        } else if (prev.length < maxSeats) {
           return [...prev, seat.seat_id];
         }
+        return prev;
       });
     }
   };

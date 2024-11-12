@@ -27,7 +27,7 @@ function Hero() {
 
   return (
     <Carousel
-      className="max-w-[1200px] h-full w-full"
+      className="h-full w-full"
       plugins={[
         Autoplay({
           delay: 10000,

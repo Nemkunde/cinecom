@@ -50,9 +50,9 @@ const renderSeatRow = (row: string, seatsInRow: any[]) => {
         .sort((a, b) => b.seat_number - a.seat_number)
         .map((seat) => (
           <div
-            key={seat.seat_id}
+            key={`${seat.seat_id}-${seat.row_number}-${seat.seat_number}`}
             className={`p-1
-              ${seat.status === "booked" ? "bg-red-700" : selectedSeats.includes(seat.seat_id) ? "bg-[#474747]" : "bg-green-700 hover:cursor-pointer hover:bg-[#B7B7B7]"}
+              ${seat.status === "booked" ? "bg-green-900 opacity-60" : selectedSeats.includes(seat.seat_id) ? "bg-green-700 brightness-200" : "bg-green-700 hover:cursor-pointer hover:bg-[#B7B7B7]"}
               text-white rounded-md 
               w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center
               text-xs sm:text-sm md:text-base
@@ -66,6 +66,7 @@ const renderSeatRow = (row: string, seatsInRow: any[]) => {
     </div>
   );
 };
+
 
 return (
   <div className="p-2 sm:p-4">

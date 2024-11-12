@@ -42,38 +42,41 @@ function Seatmap({
     }
   };
 
-  const renderSeatRow = (row: string, seatsInRow: any[]) => {
-    return (
-      <div key={row}>
-        <div className="flex gap-4 mt-2 justify-center">
-          {seatsInRow
-            .slice()
-            .sort((a, b) => b.seat_number - a.seat_number)
-            .map((seat) => (
-              <div
-                className={`p-2
-                ${seat.status === "booked" ? "bg-red-500" : selectedSeats.includes(seat.seat_id) ? "bg-white" : "bg-green-500"} 
-                text-white rounded-md w-10 h-10 flex items-center justify-center
-                `}
-                // className={`p-2 ${seat.status === "booked" ? "bg-red-500" : "bg-green-500"} text-white rounded-md w-10 h-10 flex items-center justify-center`}
-                onClick={() => handleSelectSeats(seat)}
-              >
-                {seat.row_number}
-                {seat.seat_number}
-              </div>
-            ))}
-        </div>
-      </div>
-    );
-  };
-
+const renderSeatRow = (row: string, seatsInRow: any[]) => {
   return (
-    <div>
-      {Object.entries(seats)
-        .sort(([rowA], [rowB]) => rowA.localeCompare(rowB))
-        .map(([row, seatsInRow]) => renderSeatRow(row, seatsInRow))}
+    <div key={row} className="flex gap-1 justify-center mt-2 sm:gap-2">
+      {seatsInRow
+        .slice()
+        .sort((a, b) => b.seat_number - a.seat_number)
+        .map((seat) => (
+          <div
+            key={seat.seat_id}
+            className={`p-1
+              ${seat.status === "booked" ? "bg-red-700" : selectedSeats.includes(seat.seat_id) ? "bg-[#474747]" : "bg-green-700 hover:cursor-pointer hover:bg-[#B7B7B7]"}
+              text-white rounded-md 
+              w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex items-center justify-center
+              text-xs sm:text-sm md:text-base
+            `}
+            onClick={() => handleSelectSeats(seat)}
+          >
+            {seat.row_number}
+            {seat.seat_number}
+          </div>
+        ))}
     </div>
   );
+};
+
+return (
+  <div className="p-2 sm:p-4">
+    {Object.entries(seats)
+      .sort(([rowA], [rowB]) => rowA.localeCompare(rowB))
+      .map(([row, seatsInRow]) => renderSeatRow(row, seatsInRow))}
+  </div>
+);
+
+
+
 }
 
 export default Seatmap;

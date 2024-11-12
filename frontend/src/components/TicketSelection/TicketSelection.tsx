@@ -21,7 +21,7 @@ function TicketSelection({ tickets, setTickets }: Props) {
       const res = await fetch(`/api/tickets/ticket-types`);
       const data = await res.json();
 
-      console.log("DATA", data);
+      // console.log("DATA", data);
 
       setTicketTypes(data.ticketTypes);
     };
@@ -51,7 +51,7 @@ function TicketSelection({ tickets, setTickets }: Props) {
   }
 
   return (
-  <div className="p-4 flex flex-col lg:flex-row gap-4">
+  <div className="p-4 flex flex-col sm:flex-row gap-4">
     <div className="text-[#F0EBD6] p-4 flex-grow">
       {ticketTypes.map((type) => {
         const ticket = tickets.find((t) => t.ticketTypeId === type.ticket_type_id);

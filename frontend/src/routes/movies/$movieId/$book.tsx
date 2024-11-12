@@ -110,42 +110,43 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
     );
 
     return (
-      <div className="flex flex-col gap-4 items-center justify-center">
-        <Card className="bg-[#121D3B]">
-          <TicketSelection
-            tickets={formValues.tickets}
-            setTickets={handleTicketsChange}
-          />
-        </Card>
-        <Card className="bg-[#121D3B] p-4 flex flex-col">
-          <Seatmap
-            screeningsId={screening}
-            selectedSeats={selectedSeats}
-            setSelectedSeats={setSelectedSeats}
-            maxSeats={totalTickets}
-          />
-        </Card>
-        
-        <Button
-          className="bg-red-700 mt-2 mb-2 justify-center w-[200px]"
-          variant="destructive"
-          onClick={handleSubmit}
-        >
-          Boka
-        </Button>
-        
-        {errorMessage && ( 
-          <p className="text-center text-red-500 mt-2">
-            {errorMessage}
-          </p>
-        )}
+  <div className="flex flex-col gap-4 items-center justify-center">
+    <Card className="bg-[#121D3B] w-full max-w-[700px] mx-auto">
+      <TicketSelection
+        tickets={formValues.tickets}
+        setTickets={handleTicketsChange}
+      />
+    </Card>
+    <Card className="bg-[#121D3B] p-4 flex flex-col w-full max-w-[700px] mx-auto">
+      <Seatmap
+        screeningsId={screening}
+        selectedSeats={selectedSeats}
+        setSelectedSeats={setSelectedSeats}
+        maxSeats={totalTickets}
+      />
+    </Card>
+    
+    <Button
+      className="bg-red-700 mt-2 mb-2 justify-center w-[200px]"
+      variant="destructive"
+      onClick={handleSubmit}
+    >
+      Boka
+    </Button>
+    
+    {errorMessage && (
+      <p className="text-center text-red-500 mt-2">
+        {errorMessage}
+      </p>
+    )}
 
-        {bookingMessage && ( 
-          <p className="text-center text-white mt-2">
-            {bookingMessage}
-          </p>
-        )}
-      </div>
-    );
+    {bookingMessage && (
+      <p className="text-center text-white mt-2">
+        {bookingMessage}
+      </p>
+    )}
+  </div>
+);
+
   },
 });

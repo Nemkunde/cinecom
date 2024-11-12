@@ -5,6 +5,7 @@ import { useAuth } from "src/components/Context/AuthContext";
 import Seatmap from "src/components/Seatmap/Seatmap";
 import TicketSelection from "src/components/TicketSelection/TicketSelection";
 import { Button } from "src/components/ui/button";
+import { Card } from "src/components/ui/card";
 
 type Booking = {
   screening: number;
@@ -45,7 +46,9 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
       customerName: user?.firstname ?? "Guest",
       customerEmail: user?.email ?? "guest@example.com",
     });
-
+    
+    const [bookingMessage, setBookingMessage] = useState<string | null>(null); 
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); 
     useEffect(() => {
       setFormValues((prev) => ({
         ...prev,
@@ -70,15 +73,25 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
         return await response.json();
       },
       onSuccess: async (data) => {
-        window.location.reload();
+        setBookingMessage("Bokningen lyckades!");
+        setErrorMessage(null);
         console.log("Booking created", data);
+        
       },
       onError: (error) => {
+        setBookingMessage(null); 
+        setErrorMessage("Bokningen misslyckades. Vänligen försök igen.");
         console.error("Error creating a booking", error);
       },
     });
 
     const handleSubmit = async () => {
+      if (selectedSeats.length === 0) {
+        setErrorMessage("Du måste välja platser innan du bokar.");
+        return; 
+      }
+
+      setErrorMessage(null); 
       await mutation.mutateAsync();
     };
 
@@ -98,19 +111,40 @@ export const Route = createFileRoute("/movies/$movieId/$book")({
 
     return (
       <div className="flex flex-col gap-4 items-center justify-center">
-        <TicketSelection
-          tickets={formValues.tickets}
-          setTickets={handleTicketsChange}
-        />
-        <Seatmap
-          screeningsId={screening}
-          selectedSeats={selectedSeats}
-          setSelectedSeats={setSelectedSeats}
-          maxSeats={totalTickets}
-        />
-        <Button variant="destructive" onClick={handleSubmit}>
+        <Card className="bg-[#121D3B]">
+          <TicketSelection
+            tickets={formValues.tickets}
+            setTickets={handleTicketsChange}
+          />
+        </Card>
+        <Card className="bg-[#121D3B] p-4 flex flex-col">
+          <Seatmap
+            screeningsId={screening}
+            selectedSeats={selectedSeats}
+            setSelectedSeats={setSelectedSeats}
+            maxSeats={totalTickets}
+          />
+        </Card>
+        
+        <Button
+          className="bg-red-700 mt-2 mb-2 justify-center w-[200px]"
+          variant="destructive"
+          onClick={handleSubmit}
+        >
           Boka
         </Button>
+        
+        {errorMessage && ( 
+          <p className="text-center text-red-500 mt-2">
+            {errorMessage}
+          </p>
+        )}
+
+        {bookingMessage && ( 
+          <p className="text-center text-white mt-2">
+            {bookingMessage}
+          </p>
+        )}
       </div>
     );
   },

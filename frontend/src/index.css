@@ -17,7 +17,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+body[data-scroll-locked][data-scroll-locked] {
+  overflow: auto !important;
+  margin-right: 0 !important;
+}
 /* a {
   font-weight: 500;
   color: #646cff;

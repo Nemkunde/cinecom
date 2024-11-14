@@ -20,6 +20,7 @@ const Profile = () => {
         if (response.ok) {
           const data = await response.json();
           setProfile(data.user);
+          
         } else {
           console.error("Failed to fetch profile");
         }
@@ -47,7 +48,7 @@ const Profile = () => {
         </button>
         <button
           className={`py-2 px-4 ${activeTab === "bookings" ? "font-bold border-b-2" : ""}`}
-          onClick={() => setActiveTab("bookings")}
+          onClick={() => setActiveTab("bookings")  }
         >
           Bokningar
         </button>

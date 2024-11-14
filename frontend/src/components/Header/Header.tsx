@@ -41,13 +41,14 @@ const Header: React.FC = () => {
       navigate({ to: "/account/login" });
     }
   };
+  
 
   return (
     <Card className="w-full bg-black text-white mb-6">
-      <CardHeader className="flex-row justify-between items-center px-4 py-6">
+      <CardHeader className="flex-row justify-evenly items-center px-4 py-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="text-[#F8C496]">
+            <Button variant="ghost" className="text-[#F8C496] mt-1.5">
               MENY
             </Button>
           </DropdownMenuTrigger>
@@ -80,7 +81,6 @@ const Header: React.FC = () => {
           onClick={() => navigate({ to: "/" })}
         />
 
-        <div className="flex space-x-6 items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-[#F8C496]">
@@ -113,7 +113,6 @@ const Header: React.FC = () => {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
       </CardHeader>
     </Card>
   );

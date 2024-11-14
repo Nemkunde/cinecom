@@ -41,10 +41,13 @@ const LoginForm = () => {
       const result = await response.json();
       localStorage.setItem("token", result.token); 
       setSuccess(true);
+
       
       window.dispatchEvent(new Event("storage")); 
 
       navigate({ to: "/" }); 
+      
+
     } catch (error) {
       setError("Failed to log in");
       console.error("Login error:", error);

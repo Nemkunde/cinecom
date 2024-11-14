@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import MovieInformationBox from "src/components/Movies/MovieInformationBox";
 import Screenings from "src/components/Movies/Screenings";
+import { Button } from "src/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "src/components/ui/dialog";
 
 export const Route = createFileRoute("/movies/$movieId/")({
@@ -56,9 +57,9 @@ export const Route = createFileRoute("/movies/$movieId/")({
                 </p>
                 <Dialog>
                   <DialogTrigger className="p-2">
-                    {/* <Button variant="outline" size="lg"> */}
+                    <Button variant="outline" size="lg">
                     Se trailer
-                    {/* </Button> */}
+                    </Button>
                   </DialogTrigger>
                   <DialogContent className="min-w-[50%] min-h-[50%]">
                     <iframe

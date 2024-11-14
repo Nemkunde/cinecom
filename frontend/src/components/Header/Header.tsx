@@ -55,12 +55,7 @@ const Header: React.FC = () => {
             <DropdownMenuItem onClick={() => navigate({ to: "/" })}>
               HEM
             </DropdownMenuItem>
-            {/* <DropdownMenuItem onClick={() => navigate({ to: "/screenings/1" })}>
-              VISNINGAR
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/movies/2" })}>
-              FILMER
-            </DropdownMenuItem> */}
+            
             <DropdownMenuItem onClick={() => navigate({ to: "/search" })}>
               SÖK
             </DropdownMenuItem>

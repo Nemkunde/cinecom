@@ -114,17 +114,21 @@ const RegisterForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="password" className="text-white">Lösenord</Label>
-              <Input className="bg-white"
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Lösenord"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
+  <Label htmlFor="password" className="text-white">Lösenord</Label>
+  <Input
+    className="bg-white"
+    id="password"
+    type="password"
+    name="password"
+    placeholder="Lösenord"
+    value={formData.password}
+    onChange={handleChange}
+    required
+    pattern="^(?=.*[A-Za-z])(?=.*[\d\W])[A-Za-z\d\W]{8,}$"
+    title="Lösenord måste vara minst 8 tecken långt och innehålla en bokstav samt antingen en siffra eller ett specialtecken." 
+  />
+</div>
+
             <Button variant="outline" className="text-white bg-[#B71313]">Registrera</Button>
 
           </div>

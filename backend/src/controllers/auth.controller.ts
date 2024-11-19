@@ -23,7 +23,7 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
     if (error.message.includes("Password must be")) {
       res.status(400).json({ error: error.message });
     } else {
-      res.status(500).json({ error: "Failed to create user" });
+      res.status(500).json({ error });
     }
   }
 };
@@ -35,6 +35,6 @@ export const signIn = async (req: Request, res: Response): Promise<void> => {
     const { user, token } = await signInUser(email, password);
     res.status(200).json({ token });
   } catch (error) {
-    res.status(401).json({ error: "Invalid credentials" });
+    res.status(401).json({ error });
   }
 };

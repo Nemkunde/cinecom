@@ -13,6 +13,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const updateLoginStatus = () => {
     setIsLoggedIn(!!localStorage.getItem("token"));
@@ -31,21 +32,16 @@ const Header: React.FC = () => {
   }, [isLoggedIn, location.pathname, navigate]);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm(
-      "Är du säker på att du vill logga ut?"
-    );
-    if (confirmLogout) {
-      localStorage.removeItem("token");
-      setIsLoggedIn(false);
-      window.location.reload();
-      navigate({ to: "/account/login" });
-    }
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate({ to: "/account/login" });
+    window.location.reload();
   };
-  
 
   return (
     <Card className="w-full bg-black text-white mb-6">
       <CardHeader className="flex-row justify-evenly items-center px-4 py-6">
+        {/* Left Dropdown Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="text-[#F8C496] mt-1.5">
@@ -56,7 +52,6 @@ const Header: React.FC = () => {
             <DropdownMenuItem onClick={() => navigate({ to: "/" })}>
               HEM
             </DropdownMenuItem>
-            
             <DropdownMenuItem onClick={() => navigate({ to: "/search" })}>
               SÖK
             </DropdownMenuItem>
@@ -74,6 +69,7 @@ const Header: React.FC = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Logo */}
         <img
           src="../img/Logo.png"
           alt="Cinecom Logo"
@@ -81,39 +77,69 @@ const Header: React.FC = () => {
           onClick={() => navigate({ to: "/" })}
         />
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="text-[#F8C496]">
-                MEDLEM
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => navigate({ to: "/account/profile" })}
-              >
-                PROFIL
-              </DropdownMenuItem>
-              {!isLoggedIn ? (
-                <>
-                  <DropdownMenuItem
-                    onClick={() => navigate({ to: "/account/register" })}
-                  >
-                    REGISTRERA ANVÄNDARE
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => navigate({ to: "/account/login" })}
-                  >
-                    LOGGA IN
-                  </DropdownMenuItem>
-                </>
-              ) : (
-                <DropdownMenuItem onClick={handleLogout}>
-                  LOGGA UT
+        {/* Right Dropdown Menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="text-[#F8C496]">
+              MEDLEM
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => navigate({ to: "/account/profile" })}
+            >
+              PROFIL
+            </DropdownMenuItem>
+            {!isLoggedIn ? (
+              <>
+                <DropdownMenuItem
+                  onClick={() => navigate({ to: "/account/register" })}
+                >
+                  REGISTRERA ANVÄNDARE
                 </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuItem
+                  onClick={() => navigate({ to: "/account/login" })}
+                >
+                  LOGGA IN
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <DropdownMenuItem onClick={() => setShowConfirm(true)}>
+                LOGGA UT
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
+
+      {/* Confirmation Modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <Card className="w-full max-w-sm bg-[#121D3B] text-white">
+            <CardHeader>
+              <p className="text-center">
+                Är du säker på att du vill logga ut?
+              </p>
+            </CardHeader>
+            <div className="flex justify-end gap-2 mt-4 p-4">
+              <Button
+                variant="outline"
+                className="bg-gray-500 text-white"
+                onClick={() => setShowConfirm(false)}
+              >
+                Avbryt
+              </Button>
+              <Button
+                variant="outline"
+                className="bg-[#B71313] text-white"
+                onClick={handleLogout}
+              >
+                Logga ut
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
     </Card>
   );
 };

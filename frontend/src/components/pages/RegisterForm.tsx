@@ -47,8 +47,8 @@ const RegisterForm = () => {
       navigate({ to: "/account/login" });
 
     } catch (error) {
-      setError("Failed to register user");
-      console.error("Registration error:", error);
+      setError("Registrering misslyckades");
+      console.error("Registrering misslyckades:", error);
     }
   };
 

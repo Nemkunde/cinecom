@@ -20,16 +20,16 @@ const BookTicketButton: React.FC<BookTicketButtonProps> = ({ seatIds, screeningI
 
       if (!response.ok) {
         const errorData = await response.json();
-        alert(errorData.message || "Failed to book tickets");
+        alert(errorData.message || "Kunde inte boka biljetter");
         return;
       }
 
       const data = await response.json();
-      alert("Tickets booked successfully!");
+      alert("Bokning slutförd!");
       console.log(data);
     } catch (error) {
-      alert("An error occurred while booking tickets.");
-      console.error("Booking error:", error);
+      alert("Ett fel inträffade vid bokning av biljetter.");
+      console.error("Bokning error:", error);
     }
   };
 

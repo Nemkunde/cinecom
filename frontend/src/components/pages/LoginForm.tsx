@@ -34,7 +34,7 @@ const LoginForm = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.error || "Login failed");
+        setError(errorData.error || "Inloggning misslyckades, vänligen försök igen.");
         return;
       }
 
@@ -52,7 +52,7 @@ const LoginForm = () => {
       
 
     } catch (error) {
-      setError("Failed to log in");
+      setError("Inloggning misslyckades, vänligen försök igen.");
       console.error("Login error:", error);
     }
   };

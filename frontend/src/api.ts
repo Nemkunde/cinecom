@@ -22,7 +22,7 @@ export async function bookTicket({
   });
 
   if (!response.ok) {
-    throw new Error("Booking failed");
+    throw new Error("Bokning misslyckades");
   }
   
   return response.json();

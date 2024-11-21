@@ -27,6 +27,10 @@ function DayBooker() {
             onClick={handlePrev}
             className="p-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
             disabled={startDayOffset <= 0}
+            style={{
+              marginRight: "20px",
+              fontSize: "24px",
+            }}
           >
             &#8592;
           </button>
@@ -42,6 +46,10 @@ function DayBooker() {
           <button
             onClick={handleNext}
             className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+            style={{
+              marginLeft: "20px",
+              fontSize: "24px",
+            }}
           >
             &#8594;
           </button>

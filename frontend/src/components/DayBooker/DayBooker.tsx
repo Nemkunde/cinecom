@@ -75,14 +75,18 @@ const DayCard = ({ dayOffset }: { dayOffset: number }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex items-center rounded-md flex-wrap"
+      className={`flex flex-col justify-center items-center rounded-md shadow-md ${isToday(targetDate)
+          ? "border border-2 bg-zinc-900 border-green-500 text-white"
+          : "bg-zinc-900 text-white"
+        } hover:bg-white hover:text-black hover:cursor-pointer`}
+      style={{
+        width: "100px", // Fast bredd
+        height: "100px", // Fast höjd
+        textAlign: "center", // Säkerställer centrerad text
+      }}
     >
-      <div
-        className={`flex flex-col shadow-md ${isToday(targetDate) ? "border border-2 bg-zinc-900 border-green-500 text-white" : "bg-zinc-900 text-white"} p-2 rounded-md hover:bg-white hover:text-black hover:cursor-pointer`}
-      >
-        <span className="capitalize">{dayName}</span>
-        <span className="capitalize">{date}</span>
-      </div>
+      <span className="capitalize text-sm font-semibold">{dayName}</span>
+      <span className="capitalize text-xs">{date}</span>
     </div>
   );
 };

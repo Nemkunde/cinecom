@@ -41,7 +41,6 @@ const Header: React.FC = () => {
   return (
     <Card className="w-full bg-black text-white mb-6">
       <CardHeader className="flex-row justify-evenly items-center px-4 py-6">
-        {/* Left Dropdown Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="text-[#F8C496] mt-1.5">
@@ -69,7 +68,6 @@ const Header: React.FC = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Logo */}
         <img
           src="../img/Logo.png"
           alt="Cinecom Logo"
@@ -77,7 +75,6 @@ const Header: React.FC = () => {
           onClick={() => navigate({ to: "/" })}
         />
 
-        {/* Right Dropdown Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="text-[#F8C496]">
@@ -112,7 +109,6 @@ const Header: React.FC = () => {
         </DropdownMenu>
       </CardHeader>
 
-      {/* Confirmation Modal */}
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <Card className="w-full max-w-sm bg-[#121D3B] text-white">

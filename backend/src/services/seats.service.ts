@@ -120,3 +120,39 @@ export const seatMap = async (screeningsId: number) => {
     throw new Error("Could not get seatmap");
   }
 };
+
+export const bookSeatService = async (seat_id: number) => {
+  try {
+    
+    const existingSeat = await db
+      .select()
+      .from(seatsTable)
+      .where(eq(seatsTable.seat_id, seat_id))
+      .limit(1);
+
+    if (existingSeat.length === 0) {
+      throw new Error("Seat not found");
+    }
+
+    if (existingSeat[0].status === "booked") {
+      throw new Error("Seat is already booked");
+    }
+
+    const updatedSeats = await db
+      .update(seatsTable)
+      .set({ status: "booked" })
+      .where(eq(seatsTable.seat_id, seat_id))
+      .returning();
+
+    return {
+      message: "Seat booked successfully",
+      seat: updatedSeats[0],
+    };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "An unknown error occurred while booking the seat.";
+    throw new Error("Error booking seat: " + errorMessage);
+  }
+  };

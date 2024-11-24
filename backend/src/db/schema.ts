@@ -45,6 +45,7 @@ export const seatsTable = pgTable("seats", {
     .references(() => auditoriumsTable.auditorium_id),
   seat_number: varchar().notNull(),
   row_number: varchar().notNull(),
+  status: varchar("status", { length: 20 }).notNull().default("available"),
 });
 
 // export const bookingsTable = pgTable("bookings", {

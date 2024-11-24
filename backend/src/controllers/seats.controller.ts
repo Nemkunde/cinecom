@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import {
   getAllSeats,
   getAllSeatsByAuditorium,
   seatMap,
+  bookSeatService,
 } from "../services/seats.service";
 
 export const getSeats = async (req: Request, res: Response) => {
@@ -53,5 +54,24 @@ export const getSeatMap = async (req: Request, res: Response) => {
     res.status(200).json(mapOfSeats);
   } catch (error) {
     res.status(500).json({ error: "Could not get seatmap" });
+  }
+};
+
+export const bookSeat = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { seat_id } = req.body;
+  if (!seat_id) {
+    res.status(400).json({ error: "Seat ID is required" });
+    return;
+  }
+
+  try {
+    const result = await bookSeatService(seat_id);
+    res.status(200).json(result);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "An unknown error occurred" });
+    }
   }
 };

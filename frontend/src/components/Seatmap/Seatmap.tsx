@@ -14,11 +14,11 @@ function Seatmap({
   maxSeats,
 }: {
   screeningsId: number;
-  setSelectedSeats: React.Dispatch<React.SetStateAction<never[]>>;
-  selectedSeats: any[];
+  setSelectedSeats: React.Dispatch<React.SetStateAction<number[]>>;
+  selectedSeats: number[];
   maxSeats: number;
 }) {
-  const [seats, setSeats] = useState<any[]>([]);
+  const [seats, setSeats] = useState<Record<string, Seat[]>>({});
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -32,13 +32,14 @@ function Seatmap({
     };
     fetchSeats();
   }, [screeningsId]);
-  const handleSelectSeats = (seat: any) => {
+
+  const handleSelectSeats = (seat: Seat) => {
     if (seat.status === "booked") return; // Ignorera om sätet är bokat
 
     if (seat.status === "available") {
-      setSelectedSeats((prev: any) => {
+      setSelectedSeats((prev) => {
         if (prev.includes(seat.seat_id)) {
-          return prev.filter((s: any) => s !== seat.seat_id);
+          return prev.filter((s) => s !== seat.seat_id);
         } else if (prev.length < maxSeats) {
           return [...prev, seat.seat_id];
         }
@@ -47,7 +48,7 @@ function Seatmap({
     }
   };
 
-const renderSeatRow = (row: string, seatsInRow: any[]) => {
+const renderSeatRow = (row: string, seatsInRow: Seat[]) => {
   return (
     <div key={row} className="flex gap-1 justify-center mt-2 sm:gap-2">
       {seatsInRow
